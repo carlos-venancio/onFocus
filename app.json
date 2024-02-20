@@ -22,7 +22,17 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.exemple.onfocus"
+      "config": {
+        "googleSignIn": {
+          "apiKey": "YOUR_API_KEY",
+          "certificateHash": "YOUR_CERTIFICATE_HASH"
+        }
+      },
+      "package": "com.exemple.onfocus",
+      "permissions": ["CAMERA", "LOCATION"],
+      "versionCode": 1,
+      "versionName": "1.0",
+      "softwareKeyboardLayoutMode": "pan"
     },
     "web": {
       "favicon": "./assets/favicon.png"

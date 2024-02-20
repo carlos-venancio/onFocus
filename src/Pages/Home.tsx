@@ -4,6 +4,7 @@ import { MaterialCommunityIcons} from "@expo/vector-icons"
 import {styles} from "./HomeStyles"
 import  Sheet  from '../Components/bottomSheet/index';
 
+
 export default function Home (){
 
     // função para ver se esta aberto 

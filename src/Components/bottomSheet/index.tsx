@@ -1,6 +1,12 @@
-import { styles, SHEET_HEIGHT, SHEET_OVER_DRAG } from './styles';
-import {Title, Container} from "./styles"
-import NumberSelector from "../Timer/index"
+import { styles, SHEET_HEIGHT, SHEET_OVER_DRAG, Main } from './styles';
+import {Title, Container, Insert, Des, CustomButton, ButtonText } from "./styles"
+import Timer from "../Timer/index"
+import React, { useState } from "react";
+import DateTimePicker from '@react-native-community/datetimepicker';
+
+
+
+
 
 // Onde pego os Icons
 import { MaterialCommunityIcons} from "@expo/vector-icons"
@@ -20,6 +26,7 @@ import Animated, {
     SlideInDown,
     SlideOutDown
 } from "react-native-reanimated"
+// import { Button } from 'react-native-ui-lib';
 
 // função para o fechamento do bottom sheet
 type Props = {
@@ -28,7 +35,14 @@ type Props = {
 
 
 export default function Sheet ({onClose}: Props){
-    
+    const [date, setDate] = useState(new Date());
+    const [mode, setMode] = useState('date');
+    const [show,setShow] = useState(false)
+
+
+
+
+
 
     // definir valor iniciar do bottom sheet, essa var vai ser reutilizada para fazer a animação
     const offset = useSharedValue(0)
@@ -68,12 +82,23 @@ export default function Sheet ({onClose}: Props){
     const translateY = useAnimatedStyle(() =>({
         transform: [{translateY: offset.value}]
     }))
+   
+
+    const [text, setText] = useState('');
+
+
+  const handleTextChange = (inputText) => {
+      setText(inputText);
+    }
+  
+   
+
 
 
     return(
         <GestureDetector gesture={pan}>
             <Animated.View 
-            style={[styles.container, translateY]}
+            style={[styles.Detector, translateY]}
             entering={SlideInDown.springify().damping(15)}
             exiting={SlideOutDown}
             
@@ -88,8 +113,36 @@ export default function Sheet ({onClose}: Props){
                 />
                 {/* <Text style={styles.title}>Opções</Text> */}
                 <Container>
-                <Title placeholder='Digite o titulo'></Title>
-                <NumberSelector/>
+                    <Main>
+                        <Title maxLength={20} placeholder='Digite o titulo'></Title>
+                        <Timer/>
+                            <Insert>
+                            <Des
+                            multiline
+                            numberOfLines={4} 
+                            placeholder='Digite aqui...'
+                            value={text}
+                            onChangeText={handleTextChange}
+                        
+                            
+                            style={{
+                            borderWidth: 1,
+                            borderColor: '#ccc',
+                            padding: 8,
+                            textAlignVertical: 'top', 
+                            }}
+                             />
+
+                            
+         
+                            </Insert>
+                            <CustomButton  activeOpacity={0.1}  onPress={() => console.log('Botão pressionado')}>
+                                <ButtonText>Criar</ButtonText>
+                            </CustomButton>
+
+                           
+                            
+                    </Main>   
                 </Container>
             </Animated.View>
         </GestureDetector>
