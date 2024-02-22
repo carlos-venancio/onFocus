@@ -43,11 +43,11 @@ type Props = {
 
 export default function Sheet({ onClose }: Props) {
    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [chosenDate, setChosenDate] = useState("");
+   const [chosenDate, setChosenDate] = useState("");
    const [isHoursPickerVisible, setHoursPickerVisibility] = useState(false);
-  const [chosenHours, setChosenHours] = useState("");
-  const [errorMessage, setErrorMessage] = useState('');
-
+   const [chosenHours, setChosenHours] = useState("");
+   const [errorMessage, setErrorMessage] = useState('');
+   const [text, setText] = useState("");
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -59,7 +59,7 @@ export default function Sheet({ onClose }: Props) {
   };
 
   const handleConfirm = (date) => {
-    console.warn("A date has been picked: ", date);
+    // console.warn("A date has been picked: ", date);
     if (date < new Date()) {
       setErrorMessage("Insira uma data válida");
     } else {
@@ -136,7 +136,7 @@ export default function Sheet({ onClose }: Props) {
     transform: [{ translateY: offset.value }],
   }));
 
-  const [text, setText] = useState("");
+  
 
   const handleTextChange = (inputText) => {
     setText(inputText);
@@ -186,17 +186,13 @@ export default function Sheet({ onClose }: Props) {
             {/* <Text id="erro">{errorMessage}</Text> */}
             <Insert>
               <Des
-                multiline
+                multiline={true} 
                 numberOfLines={4}
+                maxLength={80}
                 placeholder="Digite aqui..."
                 value={text}
                 onChangeText={handleTextChange}
-                style={{
-                  borderWidth: 1,
-                  borderColor: "#ccc",
-                  padding: 8,
-                  textAlignVertical: "top",
-                }}
+                
               />
             </Insert>
 

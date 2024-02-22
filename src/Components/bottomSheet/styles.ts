@@ -71,15 +71,19 @@ export const Button =  styled(TouchableOpacity)`
     font-size: 20px;
     justify-content: center;
     align-items: center;
-    background-color: aqua;
+    /* background-color: aqua; */
     
 `;
 export const DateTimeText =  styled.Text`
     display: flex;
     font-size: 20px;
+    padding: 5px;
     justify-content: center;
     align-items: center;
-    background-color: aqua;
+    background-color: white;
+    border: 0.5px;
+    border-color: black;
+    border-radius: 7px;
     
 `;
 export const Main =  styled.View`
@@ -103,6 +107,13 @@ export const Des = styled.TextInput`
   font-size: 19px;
   width: 250px;
   height: 150px;
+  border-width: 0.5px;
+  border-color: #ccc;
+  border-radius: 7px;
+  padding: 8px;
+  text-align: left;
+ 
+ 
 `;
 export const CustomButton = styled(TouchableOpacity)`
     background-color: #5AA15D;

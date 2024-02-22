@@ -1,7 +1,6 @@
 import { useState } from "react";
-import {View, TouchableOpacity} from "react-native"
 import { MaterialCommunityIcons} from "@expo/vector-icons"
-import {styles} from "./HomeStyles"
+import {Main, Header, Title, Logo, ButtonSheet} from "./HomeStyles"
 import  Sheet  from '../Components/bottomSheet/index';
 
 
@@ -17,12 +16,20 @@ export default function Home (){
     
 
     return(
-        <View style={styles.container}>
-            <TouchableOpacity style={styles.button} activeOpacity={0.7} onPress={toggleSheet}>
-                <MaterialCommunityIcons name="menu" size={24} color="#F1A"/>
-            </TouchableOpacity>
-            {/* ve se estiver aberto na função de cima para assim mostrar o botttom sheet */}
-            {isOpen && <Sheet onClose={toggleSheet} />}
-        </View>
+        
+            <Main >
+                
+                <Header>
+                <Title>OnFocus</Title>
+                <Logo
+                    source={require('../Img/Logo.png')}
+                />
+                </Header>
+                <ButtonSheet  activeOpacity={0.7} onPress={toggleSheet}>
+                    <MaterialCommunityIcons name="menu" size={24} color="#F1A"/>
+                </ButtonSheet>
+                {/* ve se estiver aberto na função de cima para assim mostrar o botttom sheet */}
+                {isOpen && <Sheet onClose={toggleSheet} />}
+            </Main>
     ); 
 }
