@@ -1,34 +1,36 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import {Container, ViewOpUp, ViewOpDo, ButtonUp,ButtonDown, ViewText, NumberText, Horus, Mints, Entre } from "./styles"
 
 interface State {
   number: number;
+  minutes: number;
 }
 
 
 
-class NumberSelector extends Component<{}, State> {
+class Timer extends Component<{}, State> {
 
   private increaseTimeout: NodeJS.Timeout | null = null;
   private delayTimeout: NodeJS.Timeout | null = null;
-  private delayDuration = 300; // Tempo de atraso em milissegundos (1 segundo)
+  private delayDuration = 500; // Tempo de atraso em milissegundos (1 segundo)
 
 
   constructor(props: {}) {
     super(props);
     this.state = {
       number: 0,
+      minutes: 0,
     };
   }
 
-  increaseNumber = () => {
+  increaseHours = () => {
     this.setState((prevState) => ({
       number: prevState.number < 23 ? prevState.number + 1 : 0,
 
     }));
   };
 
-  decreaseNumber = () => {
+  decreaseHours = () => {
     this.setState((prevState) => ({
       number: prevState.number > 0 ? prevState.number - 1 : 23,
     }));
@@ -38,7 +40,7 @@ class NumberSelector extends Component<{}, State> {
     // Atraso antes de começar a aumentar
     this.delayTimeout = setTimeout(() => {
       this.increaseTimeout = setInterval(() => {
-        this.increaseNumber();
+        this.increaseHours();
       }, 150); // Intervalo de aumento
     }, this.delayDuration);
   };
@@ -46,7 +48,7 @@ class NumberSelector extends Component<{}, State> {
     // Atraso antes de começar a aumentar
     this.delayTimeout = setTimeout(() => {
       this.increaseTimeout = setInterval(() => {
-        this.decreaseNumber();
+        this.decreaseHours();
       }, 150); // Intervalo de aumento
     }, this.delayDuration);
   };
@@ -65,71 +67,95 @@ class NumberSelector extends Component<{}, State> {
 
 
 
+  increaseMinutes = () => {
+    this.setState((prevState) => ({
+      minutes: prevState.minutes < 59 ? prevState.minutes + 1 : 0,
+    }));
+  };
+
+  decreaseMinutes = () => {
+    this.setState((prevState) => ({
+      minutes: prevState.minutes > 0 ? prevState.minutes - 1 : 59,
+    }));
+  };
+
+  handlePressInMints = () => {
+    // Atraso antes de começar a aumentar
+    this.delayTimeout = setTimeout(() => {
+      this.increaseTimeout = setInterval(() => {
+        this.increaseMinutes();
+      }, 150); // Intervalo de aumento
+    }, this.delayDuration);
+  };
+
+  handlePressDesMints = () => {
+    // Atraso antes de começar a diminuir
+    this.delayTimeout = setTimeout(() => {
+      this.increaseTimeout = setInterval(() => {
+        this.decreaseMinutes();
+      }, 150); // Intervalo de diminuição
+    }, this.delayDuration);
+  };
+
+  handlePressOutMints = () => {
+    // Limpar os timeouts ao soltar o botão
+    if (this.delayTimeout) {
+      clearTimeout(this.delayTimeout);
+      this.delayTimeout = null;
+    }
+    if (this.increaseTimeout) {
+      clearInterval(this.increaseTimeout);
+      this.increaseTimeout = null;
+    }
+  };
+
+
+
   render() {
     return (
-      <View style={styles.container}>
-        <TouchableOpacity onPress={this.increaseNumber} style={styles.buttonIn} onPressOut={this.handlePressOut} onPressIn={this.handlePressIn}>
-          <Text style={styles.buttonText}>+</Text>
-        </TouchableOpacity>
-        
-        <View style={styles.viewText}>
-          <Text style={styles.numberText}>{String(this.state.number).padStart(2, '0')}</Text>
-        </View>
+      <Container >
+        <Horus>
+          <ViewOpUp onPressIn={this.handlePressDes} onPress={this.decreaseHours} onPressOut={this.handlePressOut}>     
+              <ButtonUp          
+              source={require('../../Img/upload.png')}
+              />
+          </ViewOpUp>
 
-        <TouchableOpacity style={styles.buttonDes} onPressIn={this.handlePressDes} onPress={this.decreaseNumber} onPressOut={this.handlePressOut}>
-            <Text style={styles.buttonText}>-</Text>
-        </TouchableOpacity>
+          <ViewText >
+            <NumberText>{String(this.state.number).padStart(2, '0')}</NumberText>
+          </ViewText>
 
+          <ViewOpDo onPressIn={this.handlePressIn} onPress={this.increaseHours} onPressOut={this.handlePressOut} >     
+              <ButtonDown 
+              source={require('../../Img/Down.png')}
+              />
+          </ViewOpDo>
+        </Horus>
 
-        
-      </View>
+          <Entre>:</Entre>
+
+        <Mints>
+          <ViewOpUp onPressIn={this.handlePressDesMints} onPress={this.decreaseMinutes} onPressOut={this.handlePressOutMints}>     
+              <ButtonUp          
+              source={require('../../Img/upload.png')}
+              />
+          </ViewOpUp>
+
+          <ViewText >
+            <NumberText>{String(this.state.minutes).padStart(2, '0')}</NumberText>
+          </ViewText>
+
+          <ViewOpDo onPressIn={this.handlePressInMints} onPress={this.increaseMinutes} onPressOut={this.handlePressOutMints} >     
+              <ButtonDown 
+              source={require('../../Img/Down.png')}
+              />
+          </ViewOpDo>
+        </Mints>
+      </Container>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    padding: 16,
-  },
-  buttonIn: {
-    backgroundColor: 'blue',
-    width: 70,
-    padding: 10,
-    borderTopRightRadius: 5,
-    borderTopLeftRadius: 5,
-  },
-  buttonDes: {
-    backgroundColor: 'blue',
-    width: 70,
-    padding: 10,
-    borderBottomRightRadius: 5,
-    borderBottomLeftRadius: 5,
-  },
-  buttonText: {
-    textAlign: "center",
-    color: 'white',
-    fontSize: 18,
-  },
-  viewText:{
-    display: 'flex',
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "center",
-  },
-  numberText: {
-    textAlign: "center",
-    width: 70,
-    borderWidth: 1,
-    // borderTop: none,
-    // borderBottom: none,
-    borderRightColor: "black",
-    borderLeftColor: "black",
-    height: 50,
-    fontSize: 50,
-  },
-});
 
-export default NumberSelector;
+
+export default Timer;

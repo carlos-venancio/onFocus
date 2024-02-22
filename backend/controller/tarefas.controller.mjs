@@ -1,16 +1,14 @@
-import { iniciarBanco } from "../database/tarefas.database.js";
-
-// inicialização do banco de dados
-const database = await iniciarBanco();
+import database from "../database/tarefas.database.mjs";
 
 // CONSULTAR TODAS AS TAREFAS (e dividi-lás em listas)
-export function consultarTodasTarefas() {
+function consultarTodasTarefas() {
   return database.executeSql(
     `SELECT * FROM tarefas WHERE status <> "conclúido" ORDER BY dataInicio`,
     [],
     (sqlTxn, res) => {
       // classifica em duas listas, "hoje" e "em breve"
       const tarefas = { hoje: [], emBreve: [] };
+      console.log(tarefas)
 
       // objeto que facilita o consumo da data
       const dataAtual = new Date().toLocaleDateString();
@@ -35,12 +33,12 @@ export function consultarTodasTarefas() {
     (error) => {
       console.log("Erro ao consultar dados:", error);
     }
-  );
+  )
 }
 
 // INSERIR
 
-export function inserirTarefa({
+function inserirTarefa({
   tituloTarefa,
   dataInicio,
   dataFinal,
@@ -66,7 +64,7 @@ export function inserirTarefa({
 
 // ALTERAR
 
-export function alterarTarefa({
+function alterarTarefa({
   tituloTarefa,
   dataInicio,
   dataFinal,
@@ -91,3 +89,6 @@ export function alterarTarefa({
     }
   );
 }
+
+
+export default { consultarTodasTarefas, inserirTarefa, alterarTarefa }

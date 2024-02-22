@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
-import {View, TouchableOpacity, Text} from "react-native";
-import { MaterialCommunityIcons} from "@expo/vector-icons";
-import {styles} from "./HomeStyles";
+import { useEffect, useState } from "react";
+import {View, TouchableOpacity} from "react-native"
+import { MaterialCommunityIcons} from "@expo/vector-icons"
+import {styles} from "./HomeStyles"
 import  Sheet  from '../Components/bottomSheet/index';
+import databaseFunctions from '../../../backend/controller/tarefas.controller.mjs'
 
-export default function Home (){
 
+export default async function Home (){
+    
+    const tarefas = await databaseFunctions.consultarTodasTarefas()
+    console.warn(tarefas)
     // função para ver se esta aberto 
     const [ isOpen, setIsOpen ] = useState(false)
     // ve se esta aberto e se esriver ele fecha ou o contrario
@@ -14,12 +18,14 @@ export default function Home (){
         setIsOpen((prevState) => !prevState)
     }
     
+    useEffect(() => {
+
+    })
 
     return(
         <View style={styles.container}>
             <TouchableOpacity style={styles.button} activeOpacity={0.7} onPress={toggleSheet}>
                 <MaterialCommunityIcons name="menu" size={24} color="#F1A"/>
-                <Text> Teste </Text>
             </TouchableOpacity>
             {/* ve se estiver aberto na função de cima para assim mostrar o botttom sheet */}
             {isOpen && <Sheet onClose={toggleSheet} />}

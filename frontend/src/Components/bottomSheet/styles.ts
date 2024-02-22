@@ -1,6 +1,7 @@
 import { TextInput } from 'react-native-gesture-handler';
 import  { StyleSheet, Dimensions} from "react-native"
 import  styled  from "styled-components/native"
+import { TouchableOpacity } from 'react-native';
 
 // nomeando const para o tamanho para não usar numeros aleatorios e me perder na leitura
 // o tamanho da objeto sera do tamanho de uma "window" que vem de uma libary
@@ -13,7 +14,7 @@ export const SHEET_HEIGHT = 740
 export const SHEET_OVER_DRAG = 20
 
 export const styles = StyleSheet.create({
-  container:{
+  Detector:{
     width: DIMENSIONS.width,
     height: SHEET_HEIGHT,
     backgroundColor: "white",
@@ -46,12 +47,12 @@ export const styles = StyleSheet.create({
 })
 
 export const Title =  styled.TextInput`
-    margin-top: 30px;
+    margin-top: 20px;
     color: #000;
     width: 300px;
-    height: 45px;
+    height: 50px;
     border: 0.5px ;
-    border-color: #0F2;
+    border-color: #000;
     text-align: left;
     font-size: 29px;
     padding-left: 15px;
@@ -65,4 +66,62 @@ export const Container =  styled.View`
     align-items: center;
     
 `;
-  
+export const Button =  styled(TouchableOpacity)`
+    display: flex;
+    font-size: 20px;
+    justify-content: center;
+    align-items: center;
+    background-color: aqua;
+    
+`;
+export const DateTimeText =  styled.Text`
+    display: flex;
+    font-size: 20px;
+    justify-content: center;
+    align-items: center;
+    background-color: aqua;
+    
+`;
+export const Main =  styled.View`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;  
+`;
+export const Insert = styled.View`
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+`;
+export const DateTime = styled.View`
+  display: flex;
+  flex-direction: row;
+  gap: 50px;
+`;
+export const Des = styled.TextInput`
+  font-size: 19px;
+  width: 250px;
+  height: 150px;
+`;
+export const CustomButton = styled(TouchableOpacity)`
+    background-color: #5AA15D;
+    width: 200px;
+    height: 63px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    
+`;
+
+export const ButtonText = styled.Text`
+  text-align: center;
+  width: 200px;
+  color: white;
+  font-size: 20px;
+`;
+export const Text = styled.Text`
+  text-align: center;
+  color: black;
+  font-size: 20px;
+`;
