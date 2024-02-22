@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import {Container, ViewOpUp, ViewOpDo, ButtonUp,ButtonDown, ViewText, NumberText, Horus, Mints, Entre } from "./styles"
 
 interface State {
   number: number;
+  minutes: number;
 }
 
 
@@ -18,6 +19,7 @@ class Timer extends Component<{}, State> {
     super(props);
     this.state = {
       number: 0,
+      minutes: 0,
     };
   }
 
@@ -65,65 +67,95 @@ class Timer extends Component<{}, State> {
 
 
 
+  increaseMinutes = () => {
+    this.setState((prevState) => ({
+      minutes: prevState.minutes < 59 ? prevState.minutes + 1 : 0,
+    }));
+  };
+
+  decreaseMinutes = () => {
+    this.setState((prevState) => ({
+      minutes: prevState.minutes > 0 ? prevState.minutes - 1 : 59,
+    }));
+  };
+
+  handlePressInMints = () => {
+    // Atraso antes de começar a aumentar
+    this.delayTimeout = setTimeout(() => {
+      this.increaseTimeout = setInterval(() => {
+        this.increaseMinutes();
+      }, 150); // Intervalo de aumento
+    }, this.delayDuration);
+  };
+
+  handlePressDesMints = () => {
+    // Atraso antes de começar a diminuir
+    this.delayTimeout = setTimeout(() => {
+      this.increaseTimeout = setInterval(() => {
+        this.decreaseMinutes();
+      }, 150); // Intervalo de diminuição
+    }, this.delayDuration);
+  };
+
+  handlePressOutMints = () => {
+    // Limpar os timeouts ao soltar o botão
+    if (this.delayTimeout) {
+      clearTimeout(this.delayTimeout);
+      this.delayTimeout = null;
+    }
+    if (this.increaseTimeout) {
+      clearInterval(this.increaseTimeout);
+      this.increaseTimeout = null;
+    }
+  };
+
+
+
   render() {
     return (
-      <View style={styles.container}>
-        <TouchableOpacity onPressIn={this.handlePressDes} onPress={this.decreaseHours} onPressOut={this.handlePressOut}>
-          <View style={styles.button}>
-            <Image 
-            style={styles.buttonUp}
-            source={require('/Arthur Ferreira/OnFocus/src/Img/upload.png')}
-            />
-          </View>
-        </TouchableOpacity>
+      <Container >
+        <Horus>
+          <ViewOpUp onPressIn={this.handlePressDes} onPress={this.decreaseHours} onPressOut={this.handlePressOut}>     
+              <ButtonUp          
+              source={require('../../Img/upload.png')}
+              />
+          </ViewOpUp>
 
-        <View style={styles.viewText}>
-          <Text style={styles.numberText}>{String(this.state.number).padStart(2, '0')}</Text>
+          <ViewText >
+            <NumberText>{String(this.state.number).padStart(2, '0')}</NumberText>
+          </ViewText>
 
-        </View>
+          <ViewOpDo onPressIn={this.handlePressIn} onPress={this.increaseHours} onPressOut={this.handlePressOut} >     
+              <ButtonDown 
+              source={require('../../Img/Down.png')}
+              />
+          </ViewOpDo>
+        </Horus>
 
-        <TouchableOpacity onPressIn={this.handlePressIn} onPress={this.increaseHours} onPressOut={this.handlePressOut} style={styles.button}>
-            <View style={styles.button}>
-            <Image 
-            style={styles.buttonUp}
-            source={require('/Arthur Ferreira/OnFocus/src/Img/Down.png')}
-            />
-          </View>
-        </TouchableOpacity>
-      </View>
+          <Entre>:</Entre>
+
+        <Mints>
+          <ViewOpUp onPressIn={this.handlePressDesMints} onPress={this.decreaseMinutes} onPressOut={this.handlePressOutMints}>     
+              <ButtonUp          
+              source={require('../../Img/upload.png')}
+              />
+          </ViewOpUp>
+
+          <ViewText >
+            <NumberText>{String(this.state.minutes).padStart(2, '0')}</NumberText>
+          </ViewText>
+
+          <ViewOpDo onPressIn={this.handlePressInMints} onPress={this.increaseMinutes} onPressOut={this.handlePressOutMints} >     
+              <ButtonDown 
+              source={require('../../Img/Down.png')}
+              />
+          </ViewOpDo>
+        </Mints>
+      </Container>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    padding: 16,
-  },
-  button: {
-    // backgroundColor: 'blue',
-    padding: 10,
-    borderRadius: 5,
-  },
-  buttonUp: {
-    backgroundColor:"white",
-    width: 30, // Ajuste o tamanho conforme necessário
-    height: 30,
-  },
-  viewText:{
-    display: 'flex',
-    flexDirection: "row",
-  },
-  numberText: {
-    textAlign: "center",
-    width: 80,
-    // borderWidth: 1,
-    // borderColor: "black",
-    height: 70,
-    fontSize: 42,
-  },
-});
+
 
 export default Timer;
