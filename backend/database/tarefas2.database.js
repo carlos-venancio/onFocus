@@ -1,9 +1,9 @@
 const sqlite3 = require('sqlite3').verbose();
 
-// Abrindo a conexão com o banco de dados (criará o arquivo do banco de dados se não existir)
+// abrir a conexão com o banco de dados 
 const db = new sqlite3.Database('./todo.db');
 
-// Criando a tabela de tarefas se ela não existir
+// criar a tabela de tarefas se ela não existir
 db.serialize(() => {
     db.run(`CREATE TABLE IF NOT EXISTS tarefas(
         pk_tarefaId INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -15,7 +15,7 @@ db.serialize(() => {
     )`);
 });
 
-// Exportando funções para serem utilizadas nos controladores
+// vai exportar funções para serem utilizadas nos controladores
 module.exports = {
     // Função para buscar todas as tarefas
     getAllTarefas: function(callback) {
@@ -28,7 +28,7 @@ module.exports = {
         });
     },
 
-    // Função para adicionar uma nova tarefa
+    // funcao para adicionar uma nova tarefa
     addTarefa: function(tarefa, callback) {
         db.run(`INSERT INTO tarefas (tituloTarefa, dataInicio, dataFinal, descricao, status) VALUES (?, ?, ?, ?, ?)`,
             [tarefa.tituloTarefa, tarefa.dataInicio, tarefa.dataFinal, tarefa.descricao, tarefa.status],
@@ -41,7 +41,7 @@ module.exports = {
             });
     },
 
-    // Função para excluir uma tarefa pelo ID
+    // funcao para excluir uma tarefa pelo ID
     deleteTarefa: function(id, callback) {
         db.run(`DELETE FROM tarefas WHERE pk_tarefaId = ?`, [id], function(err) {
             if (err) {
@@ -52,7 +52,7 @@ module.exports = {
         });
     },
 
-    // Função para atualizar o status de uma tarefa para cancelada pelo ID
+    // funcao para atualizar o status de uma tarefa para cancelada pelo ID
     cancelTarefa: function(id, callback) {
         db.run(`UPDATE tarefas SET status = 'cancelada' WHERE pk_tarefaId = ?`, [id], function(err) {
             if (err) {
