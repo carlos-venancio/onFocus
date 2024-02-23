@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import {GestureHandlerRootView} from "react-native-gesture-handler"
-import Home  from "../src/Pages/Home"
+import Home  from "./frontend/src/Pages/Home"
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 
