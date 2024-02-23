@@ -7,9 +7,9 @@ export default async function iniciarBanco() {
   // 1. Criação do banco de dados
   const db = await SQLite.openDatabase({
     name: "onfocus.db",
-    location: 'default'
+    location: 'default',
   })
-
+  
   // 2. Criação das tabela
   db.transaction((tx) => {
     tx.executeSql(
@@ -22,7 +22,7 @@ export default async function iniciarBanco() {
                           status TEXT NOT NULL 
               );`, // O status deve ser "concluído", "cancelada" ou "pendente", "em breve"
       [],
-      () => console.info("Tabela tarefas criada com sucesso"),
+      () => console.log("Tabela tarefas criada com sucesso"),
       (error) => console.error("Erro ao criar tabela de tarefas: " + error)
     );
   });
@@ -36,8 +36,10 @@ export async function executarTarefa(tarefa) {
     location: 'default'
   })
 
+  // 2. Executa a ação
   tarefa(db);
 
+  // 3. Fecha a conexão
   db.close(
     () => console.info('Banco fechado'), 
     error => console.error('Erro ao fechar o banco', error))

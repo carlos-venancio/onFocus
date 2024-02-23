@@ -1,8 +1,9 @@
-import database from "../database/tarefas.database.mjs";
+import { executarTarefa } from "../database/tarefas.database.mjs";
 
 // CONSULTAR TODAS AS TAREFAS (e dividi-lás em listas)
-function consultarTodasTarefas() {
-  return database.executeSql(
+async function consultarTodasTarefas() {
+  return await executarTarefa((database) => 
+    database.executeSql(
     `SELECT * FROM tarefas WHERE status <> "conclúido" ORDER BY dataInicio`,
     [],
     (sqlTxn, res) => {
@@ -20,7 +21,7 @@ function consultarTodasTarefas() {
 
         // confere se a tarefa é de hoje (mesma data); caso sim, é classificada com 'hoje', senão 'emBreve'
         tarefas[
-          dataInicio.toLocaleDateString() == dataAtual ? "hoje" : "emBreve"
+          new Date(dataInicio).toLocaleDateString() == dataAtual ? "hoje" : "emBreve"
         ].push({
           tituloTarefa,
           dataInicio,
@@ -32,38 +33,39 @@ function consultarTodasTarefas() {
 
     (error) => {
       console.log("Erro ao consultar dados:", error);
-    }
+    })
   )
 }
 
 // INSERIR
-
-function inserirTarefa({
+async function inserirTarefa({
   tituloTarefa,
   dataInicio,
   dataFinal,
   desc,
   status,
 }) {
-  // validação dos campos
-  database.executeSql(
-    `INSERT INTO tarefas (
-            tituloTarefa,
-            dataInicio,
-            dataFinal,
-            desc,
-            status 
-        ) VALUES (?,?,?,?,?)`,
-    [tituloTarefa, dataInicio, dataFinal, desc, status],
-    () => console.info("Tarefa adicionada com sucesso"),
-    (error) => {
-      console.log("Erro ao adicionar tarefa:", error);
-    }
-  );
+  return await executarTarefa(database => {
+    // validação dos campos
+    database.executeSql(
+      `INSERT INTO tarefas (
+              tituloTarefa,
+              dataInicio,
+              dataFinal,
+              desc,
+              status 
+          ) VALUES (?,?,?,?,?)`,
+      [tituloTarefa, dataInicio, dataFinal, desc, status],
+      () => console.info("Tarefa adicionada com sucesso"),
+      (error) => {
+        console.log("Erro ao adicionar tarefa:", error);
+      }
+    );
+  })
 }
 
-// ALTERAR
 
+// ALTERAR
 function alterarTarefa({
   tituloTarefa,
   dataInicio,
