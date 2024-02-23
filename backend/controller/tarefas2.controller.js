@@ -5,10 +5,10 @@ const tarefasDB = require('./tarefas2.database');
 const app = express();
 const port = 3000;
 
-// Analisar o corpo das requisições como JSON
+// vai analisar o corpo das requisições como JSON
 app.use(bodyParser.json());
 
-// Rota para buscar todas as tarefas
+// a rota para buscar todas as tarefas
 app.get('/tarefas', (req, res) => {
     tarefasDB.getAllTarefas((err, tarefas) => {
         if (err) {
@@ -18,7 +18,7 @@ app.get('/tarefas', (req, res) => {
     });
 });
 
-// Rota para adicionar uma nova tarefa
+// rota para adicionar uma nova tarefa
 app.post('/tarefas', (req, res) => {
     const novaTarefa = req.body;
     tarefasDB.addTarefa(novaTarefa, (err, result) => {
@@ -29,7 +29,7 @@ app.post('/tarefas', (req, res) => {
     });
 });
 
-// Rota para excluir uma tarefa
+// rota para excluir uma tarefa
 app.delete('/tarefas/:id', (req, res) => {
     const tarefaId = req.params.id;
     tarefasDB.deleteTarefa(tarefaId, (err) => {
@@ -40,7 +40,7 @@ app.delete('/tarefas/:id', (req, res) => {
     });
 });
 
-// Rota para cancelar uma tarefa
+// rota para cancelar uma tarefa
 app.put('/tarefas/:id/cancelar', (req, res) => {
     const tarefaId = req.params.id;
     tarefasDB.cancelTarefa(tarefaId, (err) => {
@@ -51,7 +51,8 @@ app.put('/tarefas/:id/cancelar', (req, res) => {
     });
 });
 
-// Iniciar o servidor
+// inciar o servidor
 app.listen(port, () => {
     console.log(`Servidor rodando na porta ${port}`);
 });
+
