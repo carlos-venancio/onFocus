@@ -1,19 +1,5 @@
-const sqlite3 = require('sqlite3').verbose();
+cons
 
-// abrir a conexão com o banco de dados 
-const db = new sqlite3.Database('./todo.db');
-
-// criar a tabela de tarefas se ela não existir
-db.serialize(() => {
-    db.run(`CREATE TABLE IF NOT EXISTS tarefas(
-        pk_tarefaId INTEGER PRIMARY KEY AUTOINCREMENT,
-        tituloTarefa VARCHAR(100) NOT NULL,
-        dataInicio DATE NOT NULL,
-        dataFinal DATE NOT NULL,
-        descricao VARCHAR(500) NOT NULL,
-        status TEXT NOT NULL
-    )`);
-});
 
 // vai exportar funções para serem utilizadas nos controladores
 module.exports = {
