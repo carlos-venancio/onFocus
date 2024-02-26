@@ -6,15 +6,12 @@ import {
   Des,
   CustomButton,
   ButtonText,
-  Button,
-  DateTime,
-  DateTimeText,
+  
 } from "./styles";
 import Timer from "../Timer/index";
-import React, { useState } from "react";
+import { useState } from 'react';
 
-import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { format } from "date-fns";
+
 
 // Onde pego os Icons
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -42,63 +39,8 @@ type Props = {
 };
 
 export default function Sheet({ onClose }: Props) {
-   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-   const [chosenDate, setChosenDate] = useState("");
-   const [isHoursPickerVisible, setHoursPickerVisibility] = useState(false);
-   const [chosenHours, setChosenHours] = useState("");
-   const [errorMessage, setErrorMessage] = useState('');
-   const [text, setText] = useState("");
-
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-    setErrorMessage('');  // Limpar a mensagem de erro ao mostrar a modal
-  };
-
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
-
-  const handleConfirm = (date) => {
-    // console.warn("A date has been picked: ", date);
-    if (date < new Date()) {
-      setErrorMessage("Insira uma data válida");
-    } else {
-      setChosenDate(date);
-      hideDatePicker();
-    }
-  };
-
-//   const showDatePicker = () => {
-//     setDatePickerVisibility(true);
-//   };
-
-//   const hideDatePicker = () => {
-//     setDatePickerVisibility(false);
-//   };
-
-//   const handleConfirm = (date) => {
-//     console.warn("A date has been picked: ", date);
-//     if (date < new Date()) document.querySelector("#erro").textContent = "Insira uma data válida"
-//     else  setChosenDate(date);
-    
-//     hideDatePicker();
-//   };
-
-
-  const showHoursPicker = () => {
-    setHoursPickerVisibility(true);
-  };
-
-  const hideHoursPicker = () => {
-    setHoursPickerVisibility(false);
-  };
-
-  const handleConfirmHours = (date) => {
-    // console.warn("A date has been picked: ", date);
-    setChosenHours(date);
-    hideHoursPicker();
-  };
-
+  const [text, setText] = useState("");
+   
   // definir valor iniciar do bottom sheet, essa var vai ser reutilizada para fazer a animação
   const offset = useSharedValue(0);
 
@@ -158,40 +100,19 @@ export default function Sheet({ onClose }: Props) {
 
         <Container>
           <Main>
-            <Title maxLength={20} placeholder="Digite o titulo"></Title>
+            <Title maxLength={40} placeholder="Digite o titulo"></Title>
             <Timer />
-            <DateTime>
-                <Button  onPress={showDatePicker} >
-                    {chosenDate ? <DateTimeText>{format(chosenDate, 'dd/MM/yyyy')}</DateTimeText> : <DateTimeText>Data</DateTimeText>}
-                </Button>
-                
-                    <DateTimePickerModal
-                        isVisible={isDatePickerVisible}
-                        mode="date"
-                        onConfirm={handleConfirm}
-                        onCancel={hideDatePicker}
-                        
-                    />
-                    
-                <Button onPress={showHoursPicker} >
-                    {chosenHours ? <DateTimeText>{format(chosenHours, 'HH:mm')}</DateTimeText> : <DateTimeText>Hora</DateTimeText>}                
-                </Button>
-                    <DateTimePickerModal
-                        isVisible={isHoursPickerVisible}
-                        mode="time"  
-                        onConfirm={handleConfirmHours}
-                        onCancel={hideHoursPicker}
-                    />
-            </DateTime>
-            {/* <Text id="erro">{errorMessage}</Text> */}
+            
+           
             <Insert>
               <Des
                 multiline={true} 
                 numberOfLines={4}
-                maxLength={80}
+                maxLength={150}
                 placeholder="Digite aqui..."
                 value={text}
                 onChangeText={handleTextChange}
+                textAlignVertical="top"
                 
               />
             </Insert>

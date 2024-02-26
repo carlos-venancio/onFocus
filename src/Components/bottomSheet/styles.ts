@@ -1,20 +1,20 @@
-import { TextInput } from 'react-native-gesture-handler';
-import  { StyleSheet, Dimensions} from "react-native"
-import  styled  from "styled-components/native"
-import { TouchableOpacity } from 'react-native';
+import { TextInput } from "react-native-gesture-handler";
+import { StyleSheet, Dimensions } from "react-native";
+import styled from "styled-components/native";
+import { TouchableOpacity } from "react-native";
 
 // nomeando const para o tamanho para não usar numeros aleatorios e me perder na leitura
 // o tamanho da objeto sera do tamanho de uma "window" que vem de uma libary
-const DIMENSIONS = Dimensions.get("window")
+const DIMENSIONS = Dimensions.get("window");
 
 // Tamanho da altura
-export const SHEET_HEIGHT = 740
+export const SHEET_HEIGHT = 740;
 
 // Responsavel por definir o limite até onde vai o Bottom Sheet
-export const SHEET_OVER_DRAG = 20
+export const SHEET_OVER_DRAG = 20;
 
 export const styles = StyleSheet.create({
-  Detector:{
+  Detector: {
     width: DIMENSIONS.width,
     height: SHEET_HEIGHT,
     backgroundColor: "white",
@@ -32,77 +32,50 @@ export const styles = StyleSheet.create({
     borderTopColor: "white",
     borderRadius: 50,
   },
-  title :{
+  title: {
     color: "#000",
     fontSize: 18,
     fontWeight: "bold",
     margin: 24,
   },
-  DragIcon :{
+  DragIcon: {
     marginTop: 16,
     alignSelf: "center",
-
   },
-  
-})
+});
 
-export const Title =  styled.TextInput`
-    margin-top: 20px;
-    color: #000;
-    width: 300px;
-    height: 50px;
-    border: 0.5px ;
-    border-color: #000;
-    text-align: left;
-    font-size: 29px;
-    padding-left: 15px;
-    border-radius: 15px;
-    
-    
+export const Title = styled.TextInput`
+  margin-top: 20px;
+  color: #000;
+  width: 300px;
+  height: 50px;
+  border: 0.5px;
+  border-color: #000;
+  text-align: left;
+  font-size: 29px;
+  padding-left: 15px;
+  border-radius: 15px;
 `;
-export const Container =  styled.View`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
+export const Container = styled.View`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
-export const Button =  styled(TouchableOpacity)`
-    display: flex;
-    font-size: 20px;
-    justify-content: center;
-    align-items: center;
-    /* background-color: aqua; */
-    
-`;
-export const DateTimeText =  styled.Text`
-    display: flex;
-    font-size: 20px;
-    padding: 5px;
-    justify-content: center;
-    align-items: center;
-    background-color: white;
-    border: 0.5px;
-    border-color: black;
-    border-radius: 7px;
-    
-`;
-export const Main =  styled.View`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;  
+
+
+export const Main = styled.View`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
 `;
 export const Insert = styled.View`
   display: flex;
   flex-direction: row;
   align-items: stretch;
 `;
-export const DateTime = styled.View`
-  display: flex;
-  flex-direction: row;
-  gap: 50px;
-`;
+
 export const Des = styled.TextInput`
   font-size: 19px;
   width: 250px;
@@ -111,18 +84,15 @@ export const Des = styled.TextInput`
   border-color: #ccc;
   border-radius: 7px;
   padding: 8px;
-  text-align: left;
- 
  
 `;
 export const CustomButton = styled(TouchableOpacity)`
-    background-color: #5AA15D;
-    width: 200px;
-    height: 63px;
-    align-items: center;
-    justify-content: center;
-    border-radius: 20px;
-    
+  background-color: #5aa15d;
+  width: 200px;
+  height: 63px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
 `;
 
 export const ButtonText = styled.Text`
