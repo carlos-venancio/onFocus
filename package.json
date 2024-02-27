@@ -9,6 +9,7 @@
     "web": "expo start --web",
     "api": "node ./backend/index.js"
   },
+  "type": "module",
   "dependencies": {
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",

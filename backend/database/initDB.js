@@ -5,7 +5,7 @@ const sqlite3 = sqlite.verbose()
 // abrir a conexão com o banco de dados 
 export default async function iniciarBanco() {
 
-  const db = new sqlite3.Database('./database/onFocus.db',(err) => {
+  const db = new sqlite3.Database('./backend/database/onFocus.db',(err) => {
       
       if (err) return console.error(err.message);
   
@@ -18,7 +18,7 @@ export default async function iniciarBanco() {
           pk_tarefaId INTEGER PRIMARY KEY AUTOINCREMENT,
           tituloTarefa TEXT,
           dataInicio TEXT,
-          dataFinal TEXT,
+          duracao TEXT,
           descricao TEXT,
           status TEXT
       )`);

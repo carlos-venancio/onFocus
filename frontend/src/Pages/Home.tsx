@@ -4,39 +4,6 @@ import { MaterialCommunityIcons} from "@expo/vector-icons"
 import {Main, Header, Title, Logo, ButtonSheet} from "./HomeStyles"
 import  Sheet  from '../Components/bottomSheet/index';
 // import iniciarBanco from '../../../backend/database/tarefas.database.mjs';
-import controller from '../../../backend/controller/tarefas.controller.mjs';
-import SQLite from "react-native-sqlite-storage";
-
-
-function iniciarBanco():void {
-  // 1. Criação do banco de dados
-  const db = SQLite.openDatabase({
-    name: "onfocus.db",
-    location: 'default',
-  })
-  
-  console.log('teste')
-  // 2. Criação das tabela
-  db.transaction((tx) => {
-    tx.executeSql(
-      `CREATE TABLE IF NOT EXISTS tarefas(
-                          pk_tarefaId INTEIRO PRIMARY KEY,
-                          tituloTarefa TEXT NOT NULL,
-                          dataInicio TEXT NOT NULL,
-                          dataFinal TEXT NOT NULL,
-                          desc TEXT NOT NULL,
-                          status TEXT NOT NULL 
-              );`, // O status deve ser "concluído", "cancelada" ou "pendente", "em breve"
-      [],
-      () => console.log("Tabela tarefas criada com sucesso"),
-      (error: string) => console.error("Erro ao criar tabela de tarefas: " + error)
-    );
-
-    return
-  });
-}
-
-const buscarTarefasIniciais = async () => await controller.consultarTodasTarefas()
 
 export default function Home (){
 
