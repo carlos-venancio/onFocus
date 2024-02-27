@@ -24,8 +24,8 @@ export default function Home (){
 
     return(
         
-            <Main >
-                
+            <Main >    
+                <ScrollView>
                 <Header
                 >
                 <Title>OnFocus</Title>
@@ -33,7 +33,6 @@ export default function Home (){
                     source={require('../Img/Logo.png')}
                 />
                 </Header>
-                <ScrollView>
                 <Container>
                     <Today>
                         <TitleText>Hoje</TitleText>

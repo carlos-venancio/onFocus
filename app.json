@@ -4,12 +4,12 @@
     "slug": "OnFocus",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/Img/Logo.png",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ff1"
+      "backgroundColor": "#ffff"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -19,7 +19,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptiveIcon.png",
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#fff10f"
       },
       "config": {
@@ -33,9 +33,7 @@
       "versionCode": 1,
       "versionName": "1.0",
       "softwareKeyboardLayoutMode": "pan"
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
     }
+    
   }
 }

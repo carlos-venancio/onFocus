@@ -160,15 +160,8 @@ export default function Timer  ()  {
   
     return (
 
-      
-
-
-
-
-
-
-
       <Container >
+        <DateTime>
         <Horus >
           <ViewOpUp onPressIn={handlePressDes} onPress={decreaseHours} onPressOut={handlePressOut}
           >     
@@ -189,9 +182,21 @@ export default function Timer  ()  {
               />
           </ViewOpDo>
         </Horus>
+        <Button  onPress={showDatePicker} >
+                    {chosenDate ? <DateTimeText>{format(chosenDate, 'dd/MM/yyyy')}</DateTimeText> : <DateTimeText>Data</DateTimeText>}
+                </Button>
+                
+                    <DateTimePickerModal
+                        isVisible={isDatePickerVisible}
+                        mode="date"
+                        onConfirm={handleConfirm}
+                        onCancel={hideDatePicker}
+                        
+                    />
+          </DateTime>
 
           <Entre>:</Entre>
-
+          <DateTime>
         <Mints>
           <ViewOpUp onPressIn={handlePressDesMints} onPress={decreaseMinutes} onPressOut={handlePressOutMints}>     
               <ButtonUp          
@@ -209,20 +214,7 @@ export default function Timer  ()  {
               />
           </ViewOpDo>
         </Mints>
-        <DateTime>
-                <Button  onPress={showDatePicker} >
-                    {chosenDate ? <DateTimeText>{format(chosenDate, 'dd/MM/yyyy')}</DateTimeText> : <DateTimeText>Data</DateTimeText>}
-                </Button>
-                
-                    <DateTimePickerModal
-                        isVisible={isDatePickerVisible}
-                        mode="date"
-                        onConfirm={handleConfirm}
-                        onCancel={hideDatePicker}
-                        
-                    />
-                    
-                <Button onPress={showHoursPicker} >
+        <Button onPress={showHoursPicker} >
                     {chosenHours ? <DateTimeText>{format(chosenHours, 'HH:mm')}</DateTimeText> : <DateTimeText>Hora</DateTimeText>}                
                 </Button>
                     <DateTimePickerModal

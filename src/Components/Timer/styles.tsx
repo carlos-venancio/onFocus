@@ -8,7 +8,6 @@ export const Container = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  
   gap: 10px;
 `;
 export const Horus = styled.View`
@@ -18,6 +17,7 @@ export const Mints = styled.View`
 
 `;
 export const Entre = styled.Text`
+    margin-bottom: 65px;
     font-size: 80px;
 `;
 
@@ -82,7 +82,7 @@ export const NumberText = styled.Text`
   `;
   export const DateTimeText = styled.Text`
   display: flex;
-  font-size: 17px;
+  font-size: 16px;
   padding: 5px;
   justify-content: center;
   align-items: center;
@@ -93,10 +93,8 @@ export const NumberText = styled.Text`
 `;
 export const DateTime = styled.View`
   display: flex;
-  flex-direction: row;
-  width: 207px;
-  justify-content: space-between;
-  /* gap: 50px; */
+  flex-direction: column;
+  gap: 20px;
 `;
 export const Button = styled(TouchableOpacity)`
   display: flex;
@@ -104,9 +102,7 @@ export const Button = styled(TouchableOpacity)`
   justify-content: center;
   align-items: center;
 `;
-export const EntreButton = styled.Text`
- 
-`;
+
 
 // const Styles = StyleSheet.create({
 //     Container: {
