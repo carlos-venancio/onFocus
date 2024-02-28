@@ -6,7 +6,7 @@ const db = await iniciarBanco();
 export default {
   // Função para buscar todas as tarefas
   getAllTarefas: function (callback) {
-    db.all("SELECT * FROM tarefas", (err, rows) => {
+    db.all("SELECT tituloTarefa, dataInicio FROM tarefas", (err, rows) => {
       if (err) {
         console.error(err.message);
         return callback(err);
@@ -15,9 +15,15 @@ export default {
     });
   },
 
-  // getOneTarefa: function(callback) {
-  //   db.
-  // },
+  getOneTarefa: function (id, callback) {
+    db.get(`SELECT tituloTarefa, dataInicio, duracao, descricao, status FROM tarefas WHERE pk_tarefaId = ?`, [id], (err, row) => {
+      if (err) {
+        console.error(err.message);
+        return callback(err);
+      }
+      callback(null, row);
+    });
+  },
 
   // funcao para adicionar uma nova tarefa
   addTarefa: async function (tarefa, callback) {
@@ -43,27 +49,26 @@ export default {
   // funcao para excluir uma tarefa pelo ID
   deleteTarefa: async function (id, callback) {
     try {
-        db.run(`DELETE FROM tarefas WHERE pk_tarefaId = ?`, [id], function (err) {
-          if (err) {
-            console.error(err.message);
-            return callback(err);
-          }
-          callback(null, { id: this.changes ? id : 0 })
-        });
-    }
-    catch(err) {
-        callback(err)
+      db.run(`DELETE FROM tarefas WHERE pk_tarefaId = ?`, [id], function (err) {
+        if (err) {
+          console.error(err.message);
+          return callback(err);
+        }
+        callback(null, { id: this.changes ? id : 0 });
+      });
+    } catch (err) {
+      callback(err);
     }
   },
 
   // funcao para atualizar o status de uma tarefa para cancelada pelo ID
   cancelTarefa: async function (id, callback) {
-    console.log(id)
+    console.log(id);
     db.run(
       `UPDATE tarefas SET status = 'cancelada' WHERE pk_tarefaId = ?`,
       [id],
       function (err) {
-        return err ? callback(err) : callback(null,{ lines: this.changes })
+        return err ? callback(err) : callback(null, { lines: this.changes });
       }
     );
   },

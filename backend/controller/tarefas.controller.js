@@ -19,9 +19,6 @@ app.get = () =>
 
       // loop que adiciona cada tarefa na sua respectiva lista
       todasTarefas.forEach((tarefa) => {
-        // dados que serão retornados
-        const { tituloTarefa, dataInicio } = tarefa;
-
         // separa a data para poder determinar o padrão de formatação
         let formatData =
           dataInicio.indexOf("/") > 0
@@ -37,21 +34,25 @@ app.get = () =>
           new Date(formatData.join("/")).toLocaleDateString() == dataAtual
             ? "hoje"
             : "emBreve"
-        ].push({
-          tituloTarefa,
-          dataInicio,
-        });
+        ].push(tarefa);
       });
 
       resolve(tarefas);
     });
   });
 
-// O status deve ser "concluído", "cancelada" ou "pendente", "em breve"
+app.getOne = (id) => 
+new Promise((resolve,reject) => {
+  tarefasDB.getOneTarefa(id, (err,tarefa) => {
+    // evita a existencia de um erro de execução
+    if (err) reject(serverError(`function get`, err));
+
+    resolve(tarefa)
+  })
+})
 
 // Função para adicionar uma nova tarefa
 app.post = (tituloTarefa, dataInicio, duracao, descricao) => {
-  try {
     return new Promise((resolve, reject) => {
       const tarefa = validateTask(
         {
@@ -68,14 +69,10 @@ app.post = (tituloTarefa, dataInicio, duracao, descricao) => {
           : resolve({ id: result.id });
       });
     });
-  } catch (err) {
-    return serverError(err);
-  }
 };
 
 // Função para excluir uma tarefa
 app.delete = (id) => {
-  try {
     return new Promise((resolve, reject) =>
       tarefasDB.deleteTarefa(id, function (err, result) {
         if (err) {
@@ -86,14 +83,10 @@ app.delete = (id) => {
           : resolve({ message: "Informe uma tarefa válida" });
       })
     );
-  } catch (err) {
-    return serverError(`function delete - ${id}`, err);
-  }
 };
 
 // Função para cancelar uma tarefa
 app.cancelar = (id) => {
-  try {
     return new Promise((resolve, reject) => {
       tarefasDB.cancelTarefa(id, (err, result) => {
         if (err) {
@@ -102,9 +95,6 @@ app.cancelar = (id) => {
         resolve({ linesChange: result.lines });
       });
     });
-  } catch (err) {
-    return serverError(err);
-  }
 };
 
 export default app;
