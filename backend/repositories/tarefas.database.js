@@ -15,6 +15,10 @@ export default {
     });
   },
 
+  // getOneTarefa: function(callback) {
+  //   db.
+  // },
+
   // funcao para adicionar uma nova tarefa
   addTarefa: async function (tarefa, callback) {
     db.run(

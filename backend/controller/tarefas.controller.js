@@ -1,5 +1,6 @@
 import tarefasDB from "../repositories/tarefas.database.js";
-import { serverError } from "../utils/formatReponse.js";
+import { serverError, badRequestError } from "../utils/formatReponse.js";
+import { validateTask } from "../utils/validate.js";
 
 const app = {};
 
@@ -7,30 +8,41 @@ const app = {};
 app.get = () =>
   new Promise((resolve, reject) => {
     tarefasDB.getAllTarefas((err, todasTarefas) => {
+      // evita a existencia de um erro de execução
       if (err) reject(serverError(`function get`, err));
 
       // classifica em duas listas, "hoje" e "em breve"
       const tarefas = { hoje: [], emBreve: [] };
-      console.log(tarefas);
 
-      // objeto que facilita o consumo da data
+      // variavel que facilita o consumo da data
       const dataAtual = new Date().toLocaleDateString();
 
-      for (let i = 0; i < todasTarefas.length; i++) {
-        const { tituloTarefa, dataInicio } = rows.item(i);
+      // loop que adiciona cada tarefa na sua respectiva lista
+      todasTarefas.forEach((tarefa) => {
+        // dados que serão retornados
+        const { tituloTarefa, dataInicio } = tarefa;
 
+        // separa a data para poder determinar o padrão de formatação
+        let formatData =
+          dataInicio.indexOf("/") > 0
+            ? dataInicio.split("/")
+            : dataInicio.split("-");
+
+        // converte a data para o padrão americano (yyyy,mm,dd) invés de (dd,mm,yyyy)
+        if (formatData[0].length < 4) {
+          formatData.reverse();
+        }
         // confere se a tarefa é de hoje (mesma data); caso sim, é classificada com 'hoje', senão 'emBreve'
         tarefas[
-          new Date(dataInicio).toLocaleDateString() == dataAtual
+          new Date(formatData.join("/")).toLocaleDateString() == dataAtual
             ? "hoje"
             : "emBreve"
         ].push({
           tituloTarefa,
           dataInicio,
         });
-      }
+      });
 
-      return tarefas; // resposta final
       resolve(tarefas);
     });
   });
@@ -38,23 +50,24 @@ app.get = () =>
 // O status deve ser "concluído", "cancelada" ou "pendente", "em breve"
 
 // Função para adicionar uma nova tarefa
-app.post = (
-  tituloTarefa,
-  dataInicio,
-  duracao,
-  descricao,
-  status = "pendente"
-) => {
-  const tarefa = { tituloTarefa, dataInicio, duracao, descricao, status };
-
+app.post = (tituloTarefa, dataInicio, duracao, descricao) => {
   try {
-    return new Promise((resolve, reject) =>
+    return new Promise((resolve, reject) => {
+      const tarefa = validateTask(
+        {
+          tituloTarefa,
+          dataInicio,
+          duracao,
+          descricao,
+        },
+        (err) => reject(badRequestError(err))
+      );
       tarefasDB.addTarefa(tarefa, function (err, result) {
         err
           ? reject(serverError(`function post - ${tituloTarefa}`, err))
           : resolve({ id: result.id });
-      })
-    );
+      });
+    });
   } catch (err) {
     return serverError(err);
   }
