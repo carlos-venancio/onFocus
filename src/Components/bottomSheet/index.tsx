@@ -30,8 +30,7 @@ import Animated, {
   SlideInDown,
   SlideOutDown,
 } from "react-native-reanimated";
-import { checkIfConfigIsValid } from "react-native-reanimated/lib/typescript/reanimated2/animation/springUtils";
-// import { Button } from 'react-native-ui-lib';
+
 
 // função para o fechamento do bottom sheet
 type Props = {

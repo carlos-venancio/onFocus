@@ -3,34 +3,37 @@ import { StyleSheet } from 'react-native';
 import { TouchableOpacity } from "react-native";
 
 export const Main = styled.View`
-  margin-top: 40px;
   display: flex;
-  /* background-color: "#000"; */
   width: 100%;
-  height: 100%;
+ 
 `;
 export const Plus = styled.Image`
   width: 70px;
   height: 70px;
 `;
 export const ContainerSheet = styled.View`
+  position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: transparent;
+  width: "50%";
+  align-self: "center";
+  position: "absolute";
+  bottom: 50px;
 
 `;
 export const ButtonSheet = styled(TouchableOpacity)`
-  bottom: 70px;
+  bottom: 60px;
 `;
 export const Header = styled.View`
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: row;
-  margin-top: 30px;
+  margin-top: 80px;
 `;
 export const Title = styled.Text`
+
   display: flex;
   font-size: 55px;
   font-weight: bold;
@@ -43,6 +46,7 @@ export const Container = styled.View`
   justify-content: center;
   gap: 15px;
   margin-top: 65px;
+  margin-bottom: 20px;
 `;
 export const Today = styled.View`
   display: flex;

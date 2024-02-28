@@ -8,7 +8,7 @@ import { TouchableOpacity } from "react-native";
 const DIMENSIONS = Dimensions.get("window");
 
 // Tamanho da altura
-export const SHEET_HEIGHT = 740;
+export const SHEET_HEIGHT = 770;
 
 // Responsavel por definir o limite até onde vai o Bottom Sheet
 export const SHEET_OVER_DRAG = 20;
