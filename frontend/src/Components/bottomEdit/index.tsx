@@ -34,10 +34,14 @@ type Props = {
   navigation?: any;
 };
 
-export default function Sheet({ navigation, onClose }: Props) {
+export default function Edit({ navigation, onClose }: Props) {
   const handlePress = () => {
     onClose();
   };
+
+
+  
+
 
   const [text, setText] = useState("");
 
