@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import Button from "../editButton/index";
 import Confirm from "../confirmButton"
 import ModalDelete from "../modalDelete/index";
-import Timer from '../Timer/index';
-
+import Edit from "../bottomEdit/index";
 
 import { Main, VoltarButton, ImageVoltar,ContainerEdit, 
   ImageEdit, ButtonDelete, ContainerTitle, Title, Container,
@@ -23,6 +22,17 @@ const Task: React.FC<TaskProps> = ({ navigation }) => {
   const [editMode, setEditMode] = useState(false);
   const [editIcon, setEditIcon] = useState(require("../../Img/edit.png"));
   const [text, setText] = useState("");
+
+  // função para ver se esta aberto
+  const [isOpen, setIsOpen] = useState(false);
+  // ve se esta aberto e se esriver ele fecha ou o contrario
+  // (sempre vai fazer o inverso do estado atual)
+  function toggleSheet() {
+    setIsOpen((prevState) => !prevState);
+  }
+
+
+
 
   const handleEditPress = () => {
     setEditMode(!editMode);
@@ -70,7 +80,7 @@ const Task: React.FC<TaskProps> = ({ navigation }) => {
         <ContainerMix>
 
               <ContainerEdit >
-                <ButtonEdit onPress={handleEditPress}>
+                <ButtonEdit onPress={toggleSheet}>
                   <ImageEdit
                     
                     source={editIcon}
@@ -89,7 +99,7 @@ const Task: React.FC<TaskProps> = ({ navigation }) => {
                 </ButtonDelete>
               </ContainerEdit>
 
-          <Title maxLength={40} editable={editMode} placeholder="Digite o titulo"></Title>
+          <Title maxLength={40}  placeholder="Digite o titulo"></Title>
 
         </ContainerMix>
 
@@ -97,9 +107,7 @@ const Task: React.FC<TaskProps> = ({ navigation }) => {
         
         </ContainerTitle>
 
-        <Timer/>
-
-      {/* <Container >
+      <Container >
             <DateTime>
               <Horus >
                 <ViewText >
@@ -117,12 +125,11 @@ const Task: React.FC<TaskProps> = ({ navigation }) => {
                   </ViewText>            
                 </Mints>
             </DateTime>
-      </Container> */}
+      </Container>
             <Insert>
               <Des
                 multiline={true}
                 numberOfLines={4}
-                editable={editMode}
                 maxLength={150}
                 placeholder="Digite aqui..."
                 value={text}
@@ -149,6 +156,7 @@ const Task: React.FC<TaskProps> = ({ navigation }) => {
           
        
         </ContainerMain>
+        {isOpen && <Edit onClose={toggleSheet} />}
       </Main>
   );
 };

@@ -34,7 +34,7 @@ type Props = {
   navigation?: any;
 };
 
-export default function Sheet({ navigation, onClose }: Props) {
+export default function Edit({ navigation, onClose }: Props) {
   const handlePress = () => {
     onClose();
     
@@ -115,7 +115,7 @@ export default function Sheet({ navigation, onClose }: Props) {
             </Insert>
 
             <CustomButton onPress={handlePress} activeOpacity={0.1}>
-              <ButtonText>Criar</ButtonText>
+              <ButtonText>Confirmar</ButtonText>
             </CustomButton>
           </Main>
         </Container>
