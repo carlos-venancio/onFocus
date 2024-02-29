@@ -19,11 +19,12 @@ app.get = () =>
 
       // loop que adiciona cada tarefa na sua respectiva lista
       todasTarefas.forEach((tarefa) => {
+
         // separa a data para poder determinar o padrão de formatação
         let formatData =
-          dataInicio.indexOf("/") > 0
-            ? dataInicio.split("/")
-            : dataInicio.split("-");
+          tarefa.dataInicio.indexOf("/") > 0
+            ? tarefa.dataInicio.split("/")
+            : tarefa.dataInicio.split("-");
 
         // converte a data para o padrão americano (yyyy,mm,dd) invés de (dd,mm,yyyy)
         if (formatData[0].length < 4) {
@@ -41,6 +42,7 @@ app.get = () =>
     });
   });
 
+// Função que retorna uma tarefa 
 app.getOne = (id) =>
   new Promise((resolve, reject) => {
     tarefasDB.getOneTarefa(id, (err, tarefa) => {
@@ -54,6 +56,7 @@ app.getOne = (id) =>
 // Função para adicionar uma nova tarefa
 app.post = (tituloTarefa, dataInicio, duracao, descricao) => {
   return new Promise((resolve, reject) => {
+    // valida os campos e adiciona o status
     const tarefa = validateTask(
       {
         tituloTarefa,
@@ -63,6 +66,7 @@ app.post = (tituloTarefa, dataInicio, duracao, descricao) => {
       },
       (err) => reject(badRequestError(err))
     );
+    // executa a função de manipulação passando os dados e a função de callback (o que deve acontecer quando a função terminar de executar)
     tarefasDB.addTarefa(tarefa, function (err, result) {
       err
         ? reject(serverError(`function post - ${tituloTarefa}`, err))

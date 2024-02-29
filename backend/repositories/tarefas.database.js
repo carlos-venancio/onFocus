@@ -1,5 +1,6 @@
 import iniciarBanco from "../database/initDB.js";
 
+// inicia conexão com o banco de dados
 const db = await iniciarBanco();
 
 // vai exportar funções para serem utilizadas nos controladores
@@ -11,6 +12,7 @@ export default {
         console.error(err.message);
         return callback(err);
       }
+      // efeito (resposta) logo após a execução da função
       callback(null, rows);
     });
   },
@@ -25,6 +27,7 @@ export default {
           console.error(err.message);
           return callback(err);
         }
+        // retorna a tarefa(row)
         callback(null, row);
       }
     );
@@ -46,6 +49,7 @@ export default {
           console.error(err.message);
           return callback(err);
         }
+        // efeito (resposta) logo após a execução da função
         callback(null, { id: this.lastID });
       }
     );
@@ -61,6 +65,7 @@ export default {
           console.error(err.message);
           return callback(err);
         }
+        // efeito (resposta) logo após a execução da função
         callback(null, { lineChanges: this.changes, newTask: tarefa });
       }
     );
@@ -73,6 +78,7 @@ export default {
         console.error(err.message);
         return callback(err);
       }
+      // efeito (resposta) logo após a execução da função
       callback(null, { id: this.changes ? id : 0 });
     });
   },
@@ -84,6 +90,7 @@ export default {
       `UPDATE tarefas SET status = 'cancelada' WHERE pk_tarefaId = ?`,
       [id],
       function (err) {
+        // efeito (resposta) logo após a execução da função
         return err ? callback(err) : callback(null, { lines: this.changes });
       }
     );
@@ -95,6 +102,7 @@ export default {
       `UPDATE tarefas SET status = 'conclúido' WHERE pk_tarefaId = ?`,
       [id],
       function (err) {
+        // efeito (resposta) logo após a execução da função
         return err ? callback(err) : callback(null, { lines: this.changes });
       }
     );
