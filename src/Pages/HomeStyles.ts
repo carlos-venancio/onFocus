@@ -7,6 +7,10 @@ export const Main = styled.View`
   width: 100%;
  
 `;
+export const ScrollView = styled.ScrollView`
+  background-color: white;
+ 
+`;
 export const Plus = styled.Image`
   width: 70px;
   height: 70px;
@@ -39,7 +43,10 @@ export const Title = styled.Text`
   font-weight: bold;
   color: black;
 `;
-export const Logo = styled.Image``;
+export const Logo = styled.Image`
+  width: 60px;
+  height: 60px;
+`;
 export const Container = styled.View`
   display: flex;
   flex-direction: column;

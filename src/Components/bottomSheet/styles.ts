@@ -1,4 +1,3 @@
-import { TextInput } from "react-native-gesture-handler";
 import { StyleSheet, Dimensions } from "react-native";
 import styled from "styled-components/native";
 import { TouchableOpacity } from "react-native";

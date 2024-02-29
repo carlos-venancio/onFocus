@@ -7,32 +7,38 @@ export const Container = styled.View`
   justify-content: center;
   align-items: center;
 `;
-export const ModlOut = styled.View`
+export const ModalOut = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.096);
+  
 `;
 export const ModalIn = styled.View`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
   background-color: white;
   padding: 20px;
   border-radius: 20px;
-  gap: 20px;
+  height: 150px;
 `;
-export const Text = styled.Text`
-  font-size: 20px;
-`;
-export const Image = styled.Image`
-  width: 40px;
-  height: 20px;
-`;
+
+
 export const CloseModal = styled(Button)`
-  display: flex;
-  justify-content: right;
-  align-items: start;
-  background-color: aqua;
+    margin-left: 140px;
+   
   
 `;
+export const Text = styled.Text`
+  font-weight: bold;
+  font-size: 25px;
+`;
+export const Image = styled.Image`
+  width: 30px;
+  height: 20px;
+`;
+
 export const ContainerButton = styled.View`
   display: flex;
   flex-direction: row;
@@ -57,5 +63,6 @@ export const Delete = styled(Button)`
   height: 39px;
 `;
 export const ButtonText = styled.Text`
+font-size: 20px;
   color: white;
 `;

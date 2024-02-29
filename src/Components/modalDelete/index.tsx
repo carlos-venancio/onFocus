@@ -3,12 +3,13 @@ import {
   Text,
   Image,
   CloseModal,
-  ModlOut,
+  ModalOut,
   ModalIn,
   ContainerButton,
   Delete,
   Cancel,
   ButtonText,
+  
 } from "./styles";
 import { Modal } from "react-native";
 import React, { useState } from "react";
@@ -18,38 +19,39 @@ interface Props {
   onClose: () => void;
 }
 const ModalDelete: React.FC<Props> = ({ isVisible, onClose }) => {
+
+   
+
   return (
-    <Container>
+    <Container >
       <Modal
         visible={isVisible}
         animationType="fade"
         transparent={true}
         onRequestClose={onClose}
       >
-        <ModlOut>
+        <ModalOut >
           <ModalIn>
-
-            <CloseModal
-              onPress={onClose}
-            >
-              <Image source={require("../../Img/exit.jpg")} />
-            </CloseModal>
+            
+              {/* <CloseModal >
+                <Image source={require("../../Img/exit.jpg")} />
+              </CloseModal> */}
+    
 
             <Text>Deseja Excluir?</Text>
             <ContainerButton>
-              <Delete>
-                <ButtonText>Sim</ButtonText>
-              </Delete>
-
-              <Cancel onPress={onClose}>
+            <Cancel onPress={onClose}  >
                 <ButtonText>Não</ButtonText>
               </Cancel>
 
+              <Delete>
+                <ButtonText>Sim</ButtonText>
+              </Delete>
             </ContainerButton>
           </ModalIn>
-        </ModlOut>
+        </ModalOut>
       </Modal>
-      
+
     </Container>
   );
 };

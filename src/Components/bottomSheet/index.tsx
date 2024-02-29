@@ -6,12 +6,9 @@ import {
   Des,
   CustomButton,
   ButtonText,
-  
 } from "./styles";
 import Timer from "../Timer/index";
-import { useState } from 'react';
-
-
+import { useState } from "react";
 
 // Onde pego os Icons
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -31,15 +28,19 @@ import Animated, {
   SlideOutDown,
 } from "react-native-reanimated";
 
-
 // função para o fechamento do bottom sheet
 type Props = {
   onClose: () => void;
+  navigation?: any;
 };
 
-export default function Sheet({ onClose }: Props) {
+export default function Sheet({ navigation, onClose }: Props) {
+  const handlePress = () => {
+    onClose();
+  };
+
   const [text, setText] = useState("");
-   
+
   // definir valor iniciar do bottom sheet, essa var vai ser reutilizada para fazer a animação
   const offset = useSharedValue(0);
 
@@ -77,8 +78,6 @@ export default function Sheet({ onClose }: Props) {
     transform: [{ translateY: offset.value }],
   }));
 
-  
-
   const handleTextChange = (inputText) => {
     setText(inputText);
   };
@@ -101,28 +100,22 @@ export default function Sheet({ onClose }: Props) {
           <Main>
             <Title maxLength={40} placeholder="Digite o titulo"></Title>
             <Timer />
-            
-           
+
             <Insert>
               <Des
-                multiline={true} 
+                multiline={true}
                 numberOfLines={4}
                 maxLength={150}
                 placeholder="Digite aqui..."
                 value={text}
                 onChangeText={handleTextChange}
                 textAlignVertical="top"
-                
               />
             </Insert>
 
-            <CustomButton
-              activeOpacity={0.1}
-              onPress={() => console.log("Botão pressionado")}
-            >
+            <CustomButton onPress={handlePress} activeOpacity={0.1}>
               <ButtonText>Criar</ButtonText>
             </CustomButton>
-           
           </Main>
         </Container>
       </Animated.View>
