@@ -7,7 +7,7 @@ const db = await iniciarBanco();
 export default {
   // Função para buscar todas as tarefas
   getAllTarefas: function (callback) {
-    db.all("SELECT tituloTarefa, dataInicio FROM tarefas", (err, rows) => {
+    db.all("SELECT pk_tarefaId, dataInicio FROM tarefas ORDER BY dataInicio ASC", (err, rows) => {
       if (err) {
         console.error(err.message);
         return callback(err);
@@ -20,7 +20,7 @@ export default {
   // Função para buscar todos os dados de apenas uma tarefa
   getOneTarefa: function (id, callback) {
     db.get(
-      `SELECT tituloTarefa, dataInicio, duracao, descricao, status FROM tarefas WHERE pk_tarefaId = ?`,
+      `SELECT * FROM tarefas WHERE pk_tarefaId = ?`,
       [id],
       (err, row) => {
         if (err) {
