@@ -41,60 +41,93 @@ app.get = () =>
     });
   });
 
-app.getOne = (id) => 
-new Promise((resolve,reject) => {
-  tarefasDB.getOneTarefa(id, (err,tarefa) => {
-    // evita a existencia de um erro de execução
-    if (err) reject(serverError(`function get`, err));
+app.getOne = (id) =>
+  new Promise((resolve, reject) => {
+    tarefasDB.getOneTarefa(id, (err, tarefa) => {
+      // evita a existencia de um erro de execução
+      if (err) reject(serverError(`function get`, err));
 
-    resolve(tarefa)
-  })
-})
+      resolve(tarefa);
+    });
+  });
 
 // Função para adicionar uma nova tarefa
 app.post = (tituloTarefa, dataInicio, duracao, descricao) => {
-    return new Promise((resolve, reject) => {
-      const tarefa = validateTask(
-        {
-          tituloTarefa,
-          dataInicio,
-          duracao,
-          descricao,
-        },
-        (err) => reject(badRequestError(err))
-      );
-      tarefasDB.addTarefa(tarefa, function (err, result) {
-        err
-          ? reject(serverError(`function post - ${tituloTarefa}`, err))
-          : resolve({ id: result.id });
-      });
+  return new Promise((resolve, reject) => {
+    const tarefa = validateTask(
+      {
+        tituloTarefa,
+        dataInicio,
+        duracao,
+        descricao,
+      },
+      (err) => reject(badRequestError(err))
+    );
+    tarefasDB.addTarefa(tarefa, function (err, result) {
+      err
+        ? reject(serverError(`function post - ${tituloTarefa}`, err))
+        : resolve({ id: result.id });
     });
+  });
 };
 
 // Função para excluir uma tarefa
 app.delete = (id) => {
-    return new Promise((resolve, reject) =>
-      tarefasDB.deleteTarefa(id, function (err, result) {
-        if (err) {
-          reject(serverError(`function delete - ${id}`, err));
-        }
-        return result.id
-          ? resolve(result)
-          : resolve({ message: "Informe uma tarefa válida" });
-      })
-    );
+  return new Promise((resolve, reject) =>
+    tarefasDB.deleteTarefa(id, function (err, result) {
+      if (err) {
+        reject(serverError(`function delete - ${id}`, err));
+      }
+      return result.id
+        ? resolve(result)
+        : resolve({ message: "Informe uma tarefa válida" });
+    })
+  );
 };
 
 // Função para cancelar uma tarefa
 app.cancelar = (id) => {
-    return new Promise((resolve, reject) => {
-      tarefasDB.cancelTarefa(id, (err, result) => {
-        if (err) {
-          reject(serverError(`function cancel - ${id}`, err));
-        }
-        resolve({ linesChange: result.lines });
-      });
+  return new Promise((resolve, reject) => {
+    tarefasDB.cancelTarefa(id, (err, result) => {
+      if (err) {
+        reject(serverError(`function cancel - ${id}`, err));
+      }
+      resolve({ linesChange: result.lines });
     });
+  });
 };
+
+// Função para alterar uma tarefa
+app.alterar = (id, tituloTarefa, dataInicio, duracao, descricao) => {
+  return new Promise((resolve, reject) => {
+    const tarefa = validateTask(
+      {
+        tituloTarefa,
+        dataInicio,
+        duracao,
+        descricao,
+      },
+      (err) => reject(badRequestError(err))
+    );
+    tarefasDB.alterTarefa(id, tarefa, function (err, result) {
+      err
+        ? reject(serverError(`function put - ${tituloTarefa}`, err))
+        : resolve(result);
+    });
+  });
+};
+
+// Função para concluir uma tarefa
+app.concluir = (id) => {
+  return new Promise((resolve, reject) => {
+    tarefasDB.concluirTarefa(id, (err, result) => {
+      if (err) {
+        reject(serverError(`function concluir - ${id}`, err));
+      }
+      resolve({ linesChange: result.lines });
+    });
+  });
+};
+
 
 export default app;

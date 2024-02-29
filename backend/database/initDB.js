@@ -1,12 +1,12 @@
 import sqlite from 'sqlite3'
-import path from 'path';
 
 const sqlite3 = sqlite.verbose()
 
 // abrir a conexão com o banco de dados 
 export default async function iniciarBanco() {
 
-  const db = new sqlite3.Database(`${process.cwd()}/backend/database/onFocus.db`,(err) => {
+  // import.meta.dirname é usado para saber o nome do diretório atual
+  const db = new sqlite3.Database(`${import.meta.dirname}\\onFocus.db`,(err) => {
       
       if (err) return console.error(err.message);
   
