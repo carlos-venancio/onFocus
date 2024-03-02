@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Main,
   Header,
@@ -23,12 +23,24 @@ import {
 } from "./HomeStyles";
 import Styles from "./HomeStyles";
 import Sheet from "../Components/bottomSheet/index";
+import api from '../../../backend/controller/tarefas.controller.js'
 
 export default function Home({ navigation }) {
   const handlePress = () => {
     navigation.navigate("Task");
   };
 
+  const [tarefa,setTarefa] = useState({})
+
+  useEffect(() => {
+    console.log("iniciando busca");
+    
+    setTarefa(api.getAll()) 
+
+    console.log("busca finalizada" + Object.keys(tarefa));
+    
+  })
+  
   
 
   // função para ver se esta aberto

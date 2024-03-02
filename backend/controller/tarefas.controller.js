@@ -1,93 +1,138 @@
-import { iniciarBanco } from "../database/tarefas.database.js";
+import tarefasDB from "../repositories/tarefas.database.js";
+import { serverError, badRequestError } from "../utils/formatReponse.js";
+import { validateTask } from "../utils/validate.js";
 
-// inicialização do banco de dados
-const database = await iniciarBanco();
+const app = {};
 
-// CONSULTAR TODAS AS TAREFAS (e dividi-lás em listas)
-export function consultarTodasTarefas() {
-  return database.executeSql(
-    `SELECT * FROM tarefas WHERE status <> "conclúido" ORDER BY dataInicio`,
-    [],
-    (sqlTxn, res) => {
+// Função para buscar todas as tarefas
+app.getAll = () =>
+  new Promise((resolve, reject) => {
+    tarefasDB.getAllTarefas((err, todasTarefas) => {
+      console.log(todasTarefas)
+      // evita a existencia de um erro de execução
+      if (err) reject(serverError(`function get`, err));
+
       // classifica em duas listas, "hoje" e "em breve"
       const tarefas = { hoje: [], emBreve: [] };
 
-      // objeto que facilita o consumo da data
-      const dataAtual = new Date().toLocaleDateString();
+      // variavel que facilita o consumo da data
+      const dataAtual = new Date().valueOf();
 
-      const { rows } = res;
+      // loop que adiciona cada tarefa na sua respectiva lista
+      todasTarefas.forEach((tarefa) => {
 
-      for (let i = 0; i < rows.length; i++) {
-        const { tituloTarefa, dataInicio } = rows.item(i);
+        // separa a data para poder determinar o padrão de formatação
+        let formatData =
+          tarefa.dataInicio.indexOf("/") > 0
+            ? tarefa.dataInicio.split("/")
+            : tarefa.dataInicio.split("-");
 
+        // converte a data para o padrão americano (yyyy,mm,dd) invés de (dd,mm,yyyy)
+        if (formatData[0].length < 4) {
+          formatData.reverse();
+        }
         // confere se a tarefa é de hoje (mesma data); caso sim, é classificada com 'hoje', senão 'emBreve'
         tarefas[
-          dataInicio.toLocaleDateString() == dataAtual ? "hoje" : "emBreve"
-        ].push({
-          tituloTarefa,
-          dataInicio,
-        });
+          new Date(formatData.join("/")).valueOf() > dataAtual
+            ? "emBreve"
+            : "hoje"
+        ].push(tarefa);
+      });
+
+      resolve(tarefas);
+    });
+  });
+
+// Função que retorna uma tarefa 
+app.getOne = (id) =>
+  new Promise((resolve, reject) => {
+    tarefasDB.getOneTarefa(id, (err, tarefa) => {
+      // evita a existencia de um erro de execução
+      if (err) reject(serverError(`function get`, err));
+
+      resolve(tarefa);
+    });
+  });
+
+// Função para adicionar uma nova tarefa
+app.post = (tituloTarefa, dataInicio, duracao, descricao) => {
+  return new Promise((resolve, reject) => {
+    // valida os campos e adiciona o status
+    const tarefa = validateTask(
+      {
+        tituloTarefa,
+        dataInicio,
+        duracao,
+        descricao,
+      },
+      (err) => reject(badRequestError(err))
+    );
+    // executa a função de manipulação passando os dados e a função de callback (o que deve acontecer quando a função terminar de executar)
+    tarefasDB.addTarefa(tarefa, function (err, result) {
+      err
+        ? reject(serverError(`function post - ${tituloTarefa}`, err))
+        : resolve({ id: result.id });
+    });
+  });
+};
+
+// Função para excluir uma tarefa
+app.delete = (id) => {
+  return new Promise((resolve, reject) =>
+    tarefasDB.deleteTarefa(id, function (err, result) {
+      if (err) {
+        reject(serverError(`function delete - ${id}`, err));
       }
-
-      return tarefas; // resposta final
-    },
-
-    (error) => {
-      console.log("Erro ao consultar dados:", error);
-    }
+      return result.id
+        ? resolve(result)
+        : resolve({ message: "Informe uma tarefa válida" });
+    })
   );
-}
+};
 
-// INSERIR
+// Função para cancelar uma tarefa
+app.cancelar = (id) => {
+  return new Promise((resolve, reject) => {
+    tarefasDB.cancelTarefa(id, (err, result) => {
+      if (err) {
+        reject(serverError(`function cancel - ${id}`, err));
+      }
+      resolve({ linesChange: result.lines });
+    });
+  });
+};
 
-export function inserirTarefa({
-  tituloTarefa,
-  dataInicio,
-  dataFinal,
-  desc,
-  status,
-}) {
-  // validação dos campos
-  database.executeSql(
-    `INSERT INTO tarefas (
-            tituloTarefa,
-            dataInicio,
-            dataFinal,
-            desc,
-            status 
-        ) VALUES (?,?,?,?,?)`,
-    [tituloTarefa, dataInicio, dataFinal, desc, status],
-    () => console.info("Tarefa adicionada com sucesso"),
-    (error) => {
-      console.log("Erro ao adicionar tarefa:", error);
-    }
-  );
-}
+// Função para alterar uma tarefa
+app.alterar = (id, tituloTarefa, dataInicio, duracao, descricao) => {
+  return new Promise((resolve, reject) => {
+    const tarefa = validateTask(
+      {
+        tituloTarefa,
+        dataInicio,
+        duracao,
+        descricao,
+      },
+      (err) => reject(badRequestError(err))
+    );
+    tarefasDB.alterTarefa(id, tarefa, function (err, result) {
+      err
+        ? reject(serverError(`function put - ${tituloTarefa}`, err))
+        : resolve(result);
+    });
+  });
+};
 
-// ALTERAR
+// Função para concluir uma tarefa
+app.concluir = (id) => {
+  return new Promise((resolve, reject) => {
+    tarefasDB.concluirTarefa(id, (err, result) => {
+      if (err) {
+        reject(serverError(`function concluir - ${id}`, err));
+      }
+      resolve({ linesChange: result.lines });
+    });
+  });
+};
 
-export function alterarTarefa({
-  tituloTarefa,
-  dataInicio,
-  dataFinal,
-  desc,
-  status,
-  pk_tarfeaId
-}) {
-  // validação dos campos
-  database.executeSql(
-    `UPDATE  tarefas 
-     SET 
-        tituloTarefa  = ?,
-        dataInicio  = ?,
-        dataFinal = ?,
-        desc = ?,
-        status = ?
-    WHERE pk_tarefaId = ?`,
-    [tituloTarefa, dataInicio, dataFinal, desc, status, pk_tarfeaId],
-    () => console.info("Tarefa adicionada com sucesso"),
-    (error) => {
-      console.log("Erro ao adicionar tarefa:", error);
-    }
-  );
-}
+
+export default app;
