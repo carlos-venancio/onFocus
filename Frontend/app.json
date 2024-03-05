@@ -1,0 +1,39 @@
+{
+  "expo": {
+    "name": "OnFocus",
+    "slug": "OnFocus",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#fff10f"
+      },
+      "config": {
+        "googleSignIn": {
+          "apiKey": "YOUR_API_KEY",
+          "certificateHash": "YOUR_CERTIFICATE_HASH"
+        }
+      },
+      "package": "com.exemple.onfocus",
+      "permissions": ["CAMERA", "LOCATION"],
+      "versionCode": 1,
+      "versionName": "1.0",
+      "softwareKeyboardLayoutMode": "pan"
+    }
+    
+  }
+}
