@@ -9,8 +9,15 @@ import {
 } from "./styles";
 import Timer from "../Timer/index";
 import { useState } from "react";
+
+// Onde pego os Icons
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+
+// é usado para detectar o movimento e qual movimento esta sendo feito, respectivamente
 import { GestureDetector, Gesture } from "react-native-gesture-handler";
+
+// vai ser usado para a anaimação do bottom sheet
+// runOnJS é usado para definir onde sera rodado a tread, no caso no javascript
 import Animated, {
   useSharedValue,
   withSpring,
@@ -20,40 +27,57 @@ import Animated, {
   SlideInDown,
   SlideOutDown,
 } from "react-native-reanimated";
-import { AdMobBanner } from "expo-ads-admob";
 
+// função para o fechamento do bottom sheet
 type Props = {
   onClose: () => void;
   navigation?: any;
 };
 
-export default function Sheet({ navigation, onClose }: Props) {
+export default function Edit({ navigation, onClose }: Props) {
   const handlePress = () => {
     onClose();
   };
 
+
+  
+
+
   const [text, setText] = useState("");
+
+  // definir valor iniciar do bottom sheet, essa var vai ser reutilizada para fazer a animação
   const offset = useSharedValue(0);
 
+  // função responsavel por chamar a função que fecha o bottom sheet
   function close() {
     offset.value = 0;
     onClose();
   }
 
-  const pan = Gesture.Pan().onChange((event) => {
-    const offsetDelta = event.changeY + offset.value;
-    const clamp = Math.max(-SHEET_OVER_DRAG, offsetDelta);
-    offset.value = offsetDelta > 0 ? offsetDelta : withSpring(clamp);
-  }).onFinalize(() => {
-    if (offset.value < SHEET_HEIGHT / 3) {
-      offset.value = withSpring(0);
-    } else {
-      offset.value = withTiming(SHEET_HEIGHT, {}, () => {
-        runOnJS(close)();
-      });
-    }
-  });
+  // const com função de detectar qual movimento e sua posição para realizar a animação
+  const pan = Gesture.Pan()
+    .onChange((event) => {
+      const offsetDelta = event.changeY + offset.value;
+      const clamp = Math.max(-SHEET_OVER_DRAG, offsetDelta);
 
+      // linha responsavel por verificar se ele passou do tamanho limite
+      // e fazendo ter a animaçao de voltar, não o deixando ficar solto
+      offset.value = offsetDelta > 0 ? offsetDelta : withSpring(clamp);
+    })
+
+    // responsavel o calculo de onde ele esta e se eestiver 1/3 da altura ele fecha
+    // runOnjs é usado para ele fazer o  calculo da movimentação no javascript ou enves da ui do usuario
+    .onFinalize(() => {
+      if (offset.value < SHEET_HEIGHT / 3) {
+        offset.value = withSpring(0);
+      } else {
+        offset.value = withTiming(SHEET_HEIGHT, {}, () => {
+          runOnJS(close)();
+        });
+      }
+    });
+
+  // responsavel por fazer o calculo vertical e passar oara animação onde ele esta
   const translateY = useAnimatedStyle(() => ({
     transform: [{ translateY: offset.value }],
   }));
@@ -98,12 +122,6 @@ export default function Sheet({ navigation, onClose }: Props) {
             </CustomButton>
           </Main>
         </Container>
-
-        <AdMobBanner
-          bannerSize="banner"
-          adUnitID="ca-app-pub-3940256099942544/6300978111"
-          onDidFailToReceiveAdWithError={(error) => console.error(error)}
-        />
       </Animated.View>
     </GestureDetector>
   );

@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#ffff"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -20,12 +20,20 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#fff10f"
       },
-      "package": "com.exemple.onfocus"
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
+      "config": {
+        "googleSignIn": {
+          "apiKey": "YOUR_API_KEY",
+          "certificateHash": "YOUR_CERTIFICATE_HASH"
+        }
+      },
+      "package": "com.exemple.onfocus",
+      "permissions": ["CAMERA", "LOCATION"],
+      "versionCode": 1,
+      "versionName": "1.0",
+      "softwareKeyboardLayoutMode": "pan"
     }
+    
   }
 }
