@@ -1,16 +1,20 @@
-import app from './controller/tarefas.controller.js'
+import controller from './controller/tarefas.controller.js'
+import express from 'express'
 
-// import db from '../backend/'
-console.log('Iniciando main')
+const app = express()
 
-app.post('tarefa 2','2024/04/28, 15:00','02:00','descrição').then(async () => console.log(await app.getAll()));
-// let task = await app.delete(31)
-// task = await app.cancelar(2)
-// let alterarTask = await app.alterar(32,'tarefa hard','2024/02/30, 16:00','3:00','desc')
-// console.log(alterarTask)
+// configurações no servidor
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// await app.concluir(32)
+// rotas 
+app.get('/', controller.getAll)
+app.get('/:id', controller.getOne)
+app.post('/', controller.post)
+app.delete('/:id', controller.delete)
+app.patch('/:id/concluir', controller.concluir)
+app.patch('/:id/cancelar', controller.cancelar)
+app.put('/:id', controller.alterar)
 
-// let gettask = await app.getOne(32)
-// console.log(gettask)
+app.listen(process.env.PORT || 5000, () => console.log('Servidor rodando'))
