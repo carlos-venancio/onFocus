@@ -5,7 +5,7 @@ import { validateTask } from "../utils/validate.js";
 const app = {};
 
 // Função para buscar todas as tarefas
-app.get = () =>
+app.getAll = () =>
   new Promise((resolve, reject) => {
     tarefasDB.getAllTarefas((err, todasTarefas) => {
       console.log(todasTarefas)
