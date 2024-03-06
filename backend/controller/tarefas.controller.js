@@ -5,9 +5,11 @@ import { validateTask } from "../utils/validate.js";
 const app = {};
 
 // Função para buscar todas as tarefas
-app.get = () =>
-  new Promise((resolve, reject) => {
-    tarefasDB.getAllTarefas((err, todasTarefas) => {
+app.getAll = () =>
+new Promise((resolve, reject) => {
+  console.log('controller')
+  tarefasDB.getAllTarefas((err, todasTarefas) => {
+      console.log(todasTarefas)
       // evita a existencia de um erro de execução
       if (err) reject(serverError(`function get`, err));
 
@@ -15,7 +17,7 @@ app.get = () =>
       const tarefas = { hoje: [], emBreve: [] };
 
       // variavel que facilita o consumo da data
-      const dataAtual = new Date().toLocaleDateString();
+      const dataAtual = new Date().valueOf();
 
       // loop que adiciona cada tarefa na sua respectiva lista
       todasTarefas.forEach((tarefa) => {
@@ -32,9 +34,9 @@ app.get = () =>
         }
         // confere se a tarefa é de hoje (mesma data); caso sim, é classificada com 'hoje', senão 'emBreve'
         tarefas[
-          new Date(formatData.join("/")).toLocaleDateString() == dataAtual
-            ? "hoje"
-            : "emBreve"
+          new Date(formatData.join("/")).valueOf() > dataAtual
+            ? "emBreve"
+            : "hoje"
         ].push(tarefa);
       });
 
