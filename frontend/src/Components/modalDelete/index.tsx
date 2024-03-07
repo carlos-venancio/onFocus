@@ -21,7 +21,7 @@ interface Props {
 }
 const ModalDelete: React.FC<Props> = ({ isVisible, onClose }, id ) => {
 
-   const deletarTarefa = async (id:number) => {
+   const deletarTarefa = async () => {
     const response = await api.delete(`/${id}`);
     if (response.status != 200) console.error(response.data.err)
    }
@@ -48,7 +48,7 @@ const ModalDelete: React.FC<Props> = ({ isVisible, onClose }, id ) => {
                 <ButtonText>Não</ButtonText>
               </Cancel>
 
-              <Delete>
+              <Delete onPress={deletarTarefa}>
                 <ButtonText>Sim</ButtonText>
               </Delete>
             </ContainerButton>

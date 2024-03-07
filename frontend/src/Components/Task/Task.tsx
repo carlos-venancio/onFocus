@@ -3,7 +3,6 @@ import Button from "../editButton/index";
 import Confirm from "../confirmButton"
 import ModalDelete from "../modalDelete/index";
 import Timer from '../Timer/index';
-import api from "../../services/server";
 
 
 

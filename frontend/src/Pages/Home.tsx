@@ -26,6 +26,7 @@ import Sheet from "../Components/bottomSheet/index";
 import api from "../services/server";
 
 export default function Home({ navigation }) {
+
   const [tarefas, settarefas] = useState<any>({});
 
   const buscarTarefas = async (): Promise<void> => {
@@ -34,11 +35,13 @@ export default function Home({ navigation }) {
   };
 
   useEffect(() => {
+    console.log('teste')
     buscarTarefas();
+    console.log(tarefas)
   }, []);
 
-  const handlePress = () => {
-    navigation.navigate("Task");
+  const handlePress = (idTarefa: number) => {
+    navigation.navigate("Task", { id: idTarefa });
   };
 
   // função para ver se esta aberto
@@ -47,6 +50,16 @@ export default function Home({ navigation }) {
   // (sempre vai fazer o inverso do estado atual)
   function toggleSheet() {
     setIsOpen((prevState) => !prevState);
+  }
+
+  if (Object.entries(tarefas).length < 1) {
+    return (
+      <Title> Carregando </Title>
+    )
+  }
+
+  else {
+    console.log(tarefas.hoje)
   }
 
   return (
@@ -61,11 +74,11 @@ export default function Home({ navigation }) {
             <TitleText>Hoje</TitleText>
 
             <TaskToday>
-              {tarefas.hoje.forEarch((tarefa: any) => {
+              {tarefas.hoje.map((tarefa: any) => {
                 return (
                   <ContainnerTask
                     style={Styles.Container}
-                    onPress={handlePress}
+                    onPress={() => handlePress(tarefa.pk_tarefaId)}
                   >
                     <ClassEnter>
                       <Class>
@@ -84,11 +97,11 @@ export default function Home({ navigation }) {
             <TitleText>Em Breve</TitleText>
 
             <TaskToday>
-            {tarefas.emBreve.forEarch((tarefa) => {
+            {tarefas.emBreve.map((tarefa: any) => {
                 return (
                   <ContainnerTask
                     style={Styles.Container}
-                    onPress={handlePress}
+                    onPress={() => handlePress(tarefa.pk_tarefaId)}
                   >
                     <ClassEnter>
                       <Class>

@@ -103,7 +103,7 @@ export default function Edit({ navigation, onClose }: Props) {
         <Container>
           <Main>
             <Title maxLength={40} placeholder="Digite o titulo"></Title>
-            <Timer />
+            <Timer active/>
 
             <Insert>
               <Des
