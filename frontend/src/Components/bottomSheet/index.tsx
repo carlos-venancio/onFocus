@@ -33,10 +33,33 @@ type Props = {
   onClose: () => void;
   navigation?: any;
 };
-
+import api from "../../services/server";
 export default function Sheet({ navigation, onClose }: Props) {
+
+  const timers = { duration: "", dataInicio: "" };
+
+  const criarTarefa = async (): Promise<void> => {
+    const response = await api.post("/", {
+      tituloTarefa: document.querySelector("#title").textContent,
+      dataInicio: timers.dataInicio,
+      duracao: timers.duration,
+      descricao: text,
+    });
+    if (response) console.info("Tarefa adicionada");
+  };
+
   const handlePress = () => {
     onClose();
+  };
+
+  const handleTimers = (
+    h: number,
+    m: number,
+    data: string,
+    horario: string
+  ) => {
+    timers.duration = `${h}:${m}`;
+    timers.dataInicio = `${data}, ${horario}`;
   };
 
   const [text, setText] = useState("");
@@ -98,8 +121,12 @@ export default function Sheet({ navigation, onClose }: Props) {
 
         <Container>
           <Main>
-            <Title maxLength={40} placeholder="Digite o titulo"></Title>
-            <Timer />
+            <Title
+              maxLength={40}
+              placeholder="Digite o titulo"
+              id="title"
+            ></Title>
+            <Timer active={handleTimers} />
 
             <Insert>
               <Des
@@ -114,7 +141,7 @@ export default function Sheet({ navigation, onClose }: Props) {
             </Insert>
 
             <CustomButton onPress={handlePress} activeOpacity={0.1}>
-              <ButtonText>Criar</ButtonText>
+              <ButtonText onPress={criarTarefa}>Criar</ButtonText>
             </CustomButton>
           </Main>
         </Container>

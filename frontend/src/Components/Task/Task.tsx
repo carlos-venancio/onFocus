@@ -3,12 +3,13 @@ import Button from "../editButton/index";
 import Confirm from "../confirmButton"
 import ModalDelete from "../modalDelete/index";
 import Timer from '../Timer/index';
+import api from "../../services/server";
 
 
 
 import { Main, VoltarButton, ImageVoltar,ContainerEdit, 
   ImageEdit, ButtonDelete, ContainerTitle, Title, Container,
-   Horus, DateTime, ViewText, NumberText, Entre, Mints, Insert, 
+  Horus, DateTime, ViewText, NumberText, Entre, Mints, Insert, 
    Des, ContainerMain, ContainerMix, ContainerVoltar, HorusText,
     ButtonEdit, ContainerButton } from "./Styles";
 import Edit from "../bottomEdit";
@@ -20,6 +21,8 @@ interface TaskProps {
 
 const Task: React.FC<TaskProps> = ({ navigation }) => {
 
+
+ 
   const [useButton, setUseButton] = useState(true);
   const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -43,6 +46,8 @@ const Task: React.FC<TaskProps> = ({ navigation }) => {
     );
   };
 
+  
+
   const toggleButton = () => {
     setUseButton(!useButton);
   };
@@ -61,6 +66,18 @@ const Task: React.FC<TaskProps> = ({ navigation }) => {
 
   const handlePress = () => {
     navigation.navigate("Home");
+  };
+
+  const timers = { duration: "", dataInicio: "" };
+  
+  const handleTimers = (
+    h: number,
+    m: number,
+    data: string,
+    horario: string
+  ) => {
+    timers.duration = `${h}:${m}`;
+    timers.dataInicio = `${data}, ${horario}`;
   };
  
 
@@ -107,7 +124,7 @@ const Task: React.FC<TaskProps> = ({ navigation }) => {
         
         </ContainerTitle>
 
-        <Timer/>
+        <Timer active={handleTimers}/>
 
       {/* <Container >
             <DateTime>

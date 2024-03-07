@@ -6,7 +6,7 @@ import { format } from "date-fns";
 
 
 
-export default function Timer  ()  {
+export default function Timer  ({active})  {
 
   const [number, setNumber] = useState(0);
   const [minutes, setMinutes] = useState(0);
@@ -21,6 +21,9 @@ export default function Timer  ()  {
   const [chosenHours, setChosenHours] = useState("");
   const [errorMessage, setErrorMessage] = useState('');
    
+  useEffect(() => {
+    active(number,minutes,chosenDate,chosenHours)
+  }, [number,minutes,chosenDate,chosenHours])
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);

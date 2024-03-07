@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import { View, Text, Button, StyleSheet, TouchableOpacity, Image ,Modal} from 'react-native';
+import api from '../../services/server'
 
 export default function App() {
+
+  const cancelar = async (id) => {
+    const response = await api.patch(`/${id}/cancelar`)
+    if (response.status != 200) console.error(response.data.err)
+  }
 
 const [isModalVisible, setIsModalVisible] = useState(false);
 

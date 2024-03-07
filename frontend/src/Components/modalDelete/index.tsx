@@ -13,14 +13,18 @@ import {
 } from "./styles";
 import { Modal } from "react-native";
 import React, { useState } from "react";
+import api from '../../services/server'
 
 interface Props {
   isVisible: boolean;
   onClose: () => void;
 }
-const ModalDelete: React.FC<Props> = ({ isVisible, onClose }) => {
+const ModalDelete: React.FC<Props> = ({ isVisible, onClose }, id ) => {
 
-   
+   const deletarTarefa = async (id:number) => {
+    const response = await api.delete(`/${id}`);
+    if (response.status != 200) console.error(response.data.err)
+   }
 
   return (
     <Container >
