@@ -5,7 +5,7 @@ import { TouchableOpacity } from "react-native";
 export const Main = styled.View`
   display: flex;
   width: 100%;
- 
+  height: 100%;
 `;
 export const ScrollView = styled.ScrollView`
   background-color: white;

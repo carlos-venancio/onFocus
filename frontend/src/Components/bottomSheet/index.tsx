@@ -39,12 +39,14 @@ export default function Sheet({ navigation, onClose }: Props) {
   const timers = { duration: "", dataInicio: "" };
 
   const criarTarefa = async (): Promise<void> => {
-    const response = await api.post("/", {
-      tituloTarefa: document.querySelector("#title").textContent,
+    const body = {
+      tituloTarefa: title,
       dataInicio: timers.dataInicio,
       duracao: timers.duration,
       descricao: text,
-    });
+    }
+    console.log(body)
+    const response = await api.post("/", body);
     if (response) console.info("Tarefa adicionada");
   };
 
@@ -52,16 +54,7 @@ export default function Sheet({ navigation, onClose }: Props) {
     onClose();
   };
 
-  const handleTimers = (
-    h: number,
-    m: number,
-    data: string,
-    horario: string
-  ) => {
-    timers.duration = `${h}:${m}`;
-    timers.dataInicio = `${data}, ${horario}`;
-  };
-
+  const [title,setTitle] = useState("")
   const [text, setText] = useState("");
 
   // definir valor iniciar do bottom sheet, essa var vai ser reutilizada para fazer a animação
@@ -105,6 +98,11 @@ export default function Sheet({ navigation, onClose }: Props) {
     setText(inputText);
   };
 
+  const hanleTitleChage = (inputText) => {
+    setTitle(inputText);
+  };
+
+
   return (
     <GestureDetector gesture={pan}>
       <Animated.View
@@ -124,9 +122,9 @@ export default function Sheet({ navigation, onClose }: Props) {
             <Title
               maxLength={40}
               placeholder="Digite o titulo"
-              id="title"
+              onChangeText={hanleTitleChage}
             ></Title>
-            <Timer active={handleTimers} />
+            <Timer timers={timers} />
 
             <Insert>
               <Des

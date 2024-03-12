@@ -31,6 +31,7 @@ export default function Home({ navigation }) {
 
   const buscarTarefas = async (): Promise<void> => {
     const response = await api.get("/");
+    console.log(response.data)
     if (response.status == 200) settarefas(response.data);
   };
 
@@ -74,11 +75,25 @@ export default function Home({ navigation }) {
             <TitleText>Hoje</TitleText>
 
             <TaskToday>
+                  <ContainnerTask
+                    style={Styles.Container}
+                    onPress={() => handlePress(1)}
+                  >
+                    <ClassEnter>
+                      <Class>
+                        <DateClass>13:00</DateClass>
+                        <CategoClass>---</CategoClass>
+                      </Class>
+                      <TaskName>Teste</TaskName>
+                    </ClassEnter>
+                    <IconEnter source={require("../Img/enter.png")} />
+                  </ContainnerTask>
               {tarefas.hoje.map((tarefa: any) => {
                 return (
                   <ContainnerTask
                     style={Styles.Container}
-                    onPress={() => handlePress(tarefa.pk_tarefaId)}
+                    onPress={() => navigation("Task")}
+                    key={tarefa.pk_tarefaId}
                   >
                     <ClassEnter>
                       <Class>
@@ -101,7 +116,8 @@ export default function Home({ navigation }) {
                 return (
                   <ContainnerTask
                     style={Styles.Container}
-                    onPress={() => handlePress(tarefa.pk_tarefaId)}
+                    onPress={() => navigation.navigate("Task", { id: Number(tarefa.pk_tarefaId) })}
+                    key={tarefa.pk_tarefaId}
                   >
                     <ClassEnter>
                       <Class>
