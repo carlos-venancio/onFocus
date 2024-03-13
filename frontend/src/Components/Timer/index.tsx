@@ -18,20 +18,11 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { format } from "date-fns";
 
 export default function Timer({ timers }) {
+  const listTimeDuration = timers.duration.split(":");
+  const listDateInitial = timers.dataInicio.split(", ");
 
-  type controlTime = {
-    hours: number;
-    minuts: number;
-    date: string;
-    timedate: string;
-  };
-
-  const handleTimers = (newsValues: controlTime) => {
-    timers.duration = `${newsValues.hours}:${newsValues.minuts}`;
-    timers.dataInicio = `${newsValues.date}, ${newsValues.timedate}`;
-  };
-
-  const dates: controlTime = { hours: 0, minuts: 0, date: "", timedate: "" };
+  const [number, setNumber] = useState(listTimeDuration[0].padStart(2, 0));
+  const [minutes, setMinutes] = useState(listTimeDuration[1].padEnd(2, 0));
 
   const [delayTimeout, setDelayTimeout] = useState<NodeJS.Timeout | null>(null);
   const [increaseTimeout, setIncreaseTimeout] = useState<NodeJS.Timeout | null>(
@@ -40,8 +31,10 @@ export default function Timer({ timers }) {
 
   const delayDuration = 300;
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [chosenDate, setChosenDate] = useState("");
   const [isHoursPickerVisible, setHoursPickerVisibility] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [chosenHours, setChosenHours] = useState(listDateInitial[0]);
+  const [errorMessage, setErrorMessage] = useState(listDateInitial[1]);
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -52,12 +45,12 @@ export default function Timer({ timers }) {
     setDatePickerVisibility(false);
   };
 
-  const handleConfirm = (date: Date) => {
+  const handleConfirm = (date) => {
     // console.warn("A date has been picked: ", date);
     if (date < new Date()) {
       setErrorMessage("Insira uma data válida");
     } else {
-      dates.date = date.toLocaleDateString();
+      setChosenDate(date);
       hideDatePicker();
     }
   };
@@ -70,26 +63,39 @@ export default function Timer({ timers }) {
     setHoursPickerVisibility(false);
   };
 
-  const handleConfirmHours = (date: Date) => {
+  const handleConfirmHours = (date) => {
     // console.warn("A date has been picked: ", date);
-    dates.timedate = date.toLocaleTimeString();
+    setChosenHours(date);
     hideHoursPicker();
   };
 
   const increaseHours = () => {
-    dates.hours = ((prevNumber) => (prevNumber < 23 ? prevNumber + 1 : 0))();
+    setNumber((prevNumber) => (prevNumber < 23 ? prevNumber + 1 : 0));
   };
 
   const decreaseHours = () => {
-    dates.hours = ((prevNumber) => (prevNumber > 0 ? prevNumber - 1 : 23))();
+    setNumber((prevNumber) => (prevNumber > 0 ? prevNumber - 1 : 23));
   };
 
-  const handlePress = (action: any) => {
+  const handlePressIn = () => {
     // Atraso antes de começar a aumentar
     const timeout = setTimeout(() => {
       const interval = setInterval(() => {
-        action();
+        increaseHours();
       }, 150); // Intervalo de aumento
+
+      setIncreaseTimeout(interval);
+    }, delayDuration);
+
+    setDelayTimeout(timeout);
+  };
+
+  const handlePressDes = () => {
+    // Atraso antes de começar a diminuir
+    const timeout = setTimeout(() => {
+      const interval = setInterval(() => {
+        decreaseHours();
+      }, 150); // Intervalo de diminuição
 
       setIncreaseTimeout(interval);
     }, delayDuration);
@@ -111,13 +117,38 @@ export default function Timer({ timers }) {
   };
 
   const increaseMinutes = () => {
-    dates.minuts = ((prevMinutes) => (prevMinutes < 59 ? prevMinutes + 1 : 0))();
+    setMinutes((prevMinutes) => (prevMinutes < 59 ? prevMinutes + 1 : 0));
   };
 
   const decreaseMinutes = () => {
-    dates.minuts = ((prevMinutes) => (prevMinutes > 0 ? prevMinutes - 1 : 59))();
+    setMinutes((prevMinutes) => (prevMinutes > 0 ? prevMinutes - 1 : 59));
   };
 
+  const handlePressInMints = () => {
+    // Atraso antes de começar a aumentar
+    const timeout = setTimeout(() => {
+      const interval = setInterval(() => {
+        increaseMinutes();
+      }, 150); // Intervalo de aumento
+
+      setIncreaseTimeout(interval);
+    }, delayDuration);
+
+    setDelayTimeout(timeout);
+  };
+
+  const handlePressDesMints = () => {
+    // Atraso antes de começar a diminuir
+    const timeout = setTimeout(() => {
+      const interval = setInterval(() => {
+        decreaseMinutes();
+      }, 150); // Intervalo de diminuição
+
+      setIncreaseTimeout(interval);
+    }, delayDuration);
+
+    setDelayTimeout(timeout);
+  };
 
   const handlePressOutMints = () => {
     // Limpar os timeouts ao soltar o botão
@@ -132,16 +163,12 @@ export default function Timer({ timers }) {
     }
   };
 
-  useEffect(() => {
-    handleTimers(dates)
-  },[dates])
-
   return (
     <Container>
       <DateTime>
         <Horus>
           <ViewOpUp
-            onPressIn={() => handlePress(decreaseHours())}
+            onPressIn={handlePressDes}
             onPress={decreaseHours}
             onPressOut={handlePressOut}
           >
@@ -149,11 +176,11 @@ export default function Timer({ timers }) {
           </ViewOpUp>
 
           <ViewText>
-            <NumberText>{String(dates.hours).padStart(2, "0")}</NumberText>
+            <NumberText>{String(number).padStart(2, "0")}</NumberText>
           </ViewText>
 
           <ViewOpDo
-            onPressIn={() => handlePress(increaseHours())}
+            onPressIn={handlePressIn}
             onPress={increaseHours}
             onPressOut={handlePressOut}
           >
@@ -161,8 +188,8 @@ export default function Timer({ timers }) {
           </ViewOpDo>
         </Horus>
         <Button onPress={showDatePicker}>
-          {Date ? (
-            <DateTimeText>{format(dates.date, "dd/MM/yyyy")}</DateTimeText>
+          {chosenDate ? (
+            <DateTimeText>{format(chosenDate, "dd/MM/yyyy")}</DateTimeText>
           ) : (
             <DateTimeText>Data</DateTimeText>
           )}
@@ -180,7 +207,7 @@ export default function Timer({ timers }) {
       <DateTime>
         <Mints>
           <ViewOpUp
-            onPressIn={() => handlePress(decreaseMinutes())}
+            onPressIn={handlePressDesMints}
             onPress={decreaseMinutes}
             onPressOut={handlePressOutMints}
           >
@@ -188,11 +215,11 @@ export default function Timer({ timers }) {
           </ViewOpUp>
 
           <ViewText>
-            <NumberText>{String(dates.minuts).padStart(2, "0")}</NumberText>
+            <NumberText>{String(minutes).padStart(2, "0")}</NumberText>
           </ViewText>
 
           <ViewOpDo
-            onPressIn={() => handlePress(increaseMinutes())}
+            onPressIn={handlePressInMints}
             onPress={increaseMinutes}
             onPressOut={handlePressOutMints}
           >
@@ -200,8 +227,8 @@ export default function Timer({ timers }) {
           </ViewOpDo>
         </Mints>
         <Button onPress={showHoursPicker}>
-          {dates.timedate ? (
-            <DateTimeText>{format(dates.timedate, "HH:mm")}</DateTimeText>
+          {chosenHours ? (
+            <DateTimeText>{format(chosenHours, "HH:mm")}</DateTimeText>
           ) : (
             <DateTimeText>Hora</DateTimeText>
           )}

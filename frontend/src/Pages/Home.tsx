@@ -27,22 +27,24 @@ import api from "../services/server";
 
 export default function Home({ navigation }) {
 
-  const [tarefas, settarefas] = useState<any>({});
+  const [tarefas, setTarefas] = useState<any>({});
 
   const buscarTarefas = async (): Promise<void> => {
     const response = await api.get("/");
     console.log(response.data)
-    if (response.status == 200) settarefas(response.data);
+    if (response.status == 200) setTarefas(response.data);
   };
 
   useEffect(() => {
-    console.log('teste')
+    console.log(navigation)
     buscarTarefas();
     console.log(tarefas)
   }, []);
 
-  const handlePress = (idTarefa: number) => {
-    navigation.navigate("Task", { id: idTarefa });
+  
+
+  const handlePress = (idTask: number) => {
+    navigation.navigate("Task", { id: idTask });
   };
 
   // função para ver se esta aberto
@@ -75,9 +77,9 @@ export default function Home({ navigation }) {
             <TitleText>Hoje</TitleText>
 
             <TaskToday>
-                  <ContainnerTask
+                  {/* <ContainnerTask
                     style={Styles.Container}
-                    onPress={() => handlePress(1)}
+                    onPress={handlePress}
                   >
                     <ClassEnter>
                       <Class>
@@ -87,18 +89,18 @@ export default function Home({ navigation }) {
                       <TaskName>Teste</TaskName>
                     </ClassEnter>
                     <IconEnter source={require("../Img/enter.png")} />
-                  </ContainnerTask>
+                  </ContainnerTask> */}
               {tarefas.hoje.map((tarefa: any) => {
                 return (
                   <ContainnerTask
                     style={Styles.Container}
-                    onPress={() => navigation("Task")}
+                    onPress={() => handlePress(Number(tarefa.pk_tarefaId))}
                     key={tarefa.pk_tarefaId}
                   >
                     <ClassEnter>
                       <Class>
                         <DateClass>{tarefa.dataInicio}</DateClass>
-                        <CategoClass>---</CategoClass>
+                        <CategoClass></CategoClass>
                       </Class>
                       <TaskName>{tarefa.tituloTarefa}</TaskName>
                     </ClassEnter>
@@ -116,7 +118,7 @@ export default function Home({ navigation }) {
                 return (
                   <ContainnerTask
                     style={Styles.Container}
-                    onPress={() => navigation.navigate("Task", { id: Number(tarefa.pk_tarefaId) })}
+                    onPress={() => handlePress(Number(tarefa.pk_tarefaId))}
                     key={tarefa.pk_tarefaId}
                   >
                     <ClassEnter>

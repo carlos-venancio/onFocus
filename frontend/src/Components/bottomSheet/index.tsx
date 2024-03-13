@@ -38,6 +38,7 @@ export default function Sheet({ navigation, onClose }: Props) {
 
   const timers = { duration: "", dataInicio: "" };
 
+
   const criarTarefa = async (): Promise<void> => {
     const body = {
       tituloTarefa: title,
@@ -124,7 +125,7 @@ export default function Sheet({ navigation, onClose }: Props) {
               placeholder="Digite o titulo"
               onChangeText={hanleTitleChage}
             ></Title>
-            <Timer timers={timers} />
+            {/* <Timer timers={timers} /> */}
 
             <Insert>
               <Des

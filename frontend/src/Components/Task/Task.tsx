@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Button from "../editButton/index";
+import { Text } from 'react-native'
 import Confirm from "../confirmButton";
 import ModalDelete from "../modalDelete/index";
 import Timer from "../Timer/index";
@@ -31,6 +32,7 @@ import {
 } from "./Styles";
 import Edit from "../bottomEdit";
 import { useEffect } from "react";
+import api from "../../services/server";
 
 interface TaskProps {
   navigation: any;
@@ -39,12 +41,15 @@ interface TaskProps {
 
 const Task: React.FC<TaskProps> = ({ navigation, route }) => {
   const { id } = route.params;
+  const [timers,setTimers] = useState({ duration: "", dataInicio: "" });
 
   const [useButton, setUseButton] = useState(true);
   const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [editIcon, setEditIcon] = useState(require("../../Img/edit.png"));
-  const [text, setText] = useState("");
+  const [title, setTitle] = useState("");
+  const [describe, setDescribe] = useState("");
+  const [loading, setLoading] = useState(true)
 
   // função para ver se esta aberto
   const [isOpen, setIsOpen] = useState(false);
@@ -54,17 +59,29 @@ const Task: React.FC<TaskProps> = ({ navigation, route }) => {
     setIsOpen((prevState) => !prevState);
   }
 
-  useEffect(() => {
-    console.log(id);
-  });
+  async function buscarTarefa() {
+    let response = await api.get(`/${id}`)
+    if (response.status != 200) console.warn(response.data.error)
+    
+    // passagem dos valores iniciais
+    setTitle(response.data.tituloTarefa)
+    setDescribe(response.data.descricao)
+    setTimers({duration: response.data.duracao,dataInicio: response.data.dataInicio})
 
+    console.log(response.data)
+    console.log(timers)
+    setLoading(false)
+  }
+
+  
+  
   const handleEditPress = () => {
     setEditMode(!editMode);
     setEditIcon(
       editMode ? require("../../Img/edit.png") : require("../../Img/check.png")
-    );
+      );
   };
-
+  
   const toggleButton = () => {
     setUseButton(!useButton);
   };
@@ -72,22 +89,30 @@ const Task: React.FC<TaskProps> = ({ navigation, route }) => {
   const abrirModalDelete = () => {
     setModalDeleteVisible(true);
   };
-
+  
   const fecharModalDelete = () => {
     setModalDeleteVisible(false);
   };
-  const handleTextChange = (inputText) => {
-    setText(inputText);
-  };
 
+  
   const handlePress = () => {
     navigation.navigate("Home");
   };
-
-  const timers = { duration: "", dataInicio: "" };
-
-  return (
-    <Main>
+  
+  
+  useEffect(() => {
+    console.log(id);
+    buscarTarefa()
+  },[]);
+  
+  if (loading) {
+    return (
+      <Text>Carregando</Text>
+      )
+    }
+    
+    return (
+      <Main>
       <ContainerMain>
         <ContainerVoltar>
           <VoltarButton onPressIn={handlePress}>
@@ -113,6 +138,8 @@ const Task: React.FC<TaskProps> = ({ navigation, route }) => {
             maxLength={40}
             editable={editMode}
             placeholder="Digite o titulo"
+            value={title}
+            onChangeText={(event) => setTitle(event)}
           ></Title>
         </ContainerMix>
 
@@ -146,8 +173,8 @@ const Task: React.FC<TaskProps> = ({ navigation, route }) => {
             editable={editMode}
             maxLength={150}
             placeholder="Digite aqui..."
-            value={text}
-            onChangeText={handleTextChange}
+            value={describe}
+            onChangeText={(event) => setDescribe(event)}
             textAlignVertical="top"
             style={{
               borderColor: editMode ? "#ccc" : "#ccc",

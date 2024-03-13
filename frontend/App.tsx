@@ -3,6 +3,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Home from "./src/Pages/Home";
 import React from "react";
 import { StatusBar } from "expo-status-bar";
+import { Text } from "react-native";
 
 import Task from "./src/Components/Task/Task";
 import Botton from "./src/Components/editButton";
